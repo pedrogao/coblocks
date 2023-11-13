@@ -27,6 +27,7 @@
   ],
   "gitHead": "cd788b6a315f608ef531524409abdce1e6790726",
   "dependencies": {
+    "js-base64": "^3.7.5",
     "lib0": "^0.2.47"
   }
 }

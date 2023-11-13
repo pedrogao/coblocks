@@ -119,6 +119,11 @@ export class Connection {
       this.webSocket.readyState === WsReadyStates.Closing
       || this.webSocket.readyState === WsReadyStates.Closed
     ) {
+      this.logger.log({
+        direction: 'out',
+        type: 'error',
+        category: 'send bu closed connection',
+      });
       this.close()
     }
 
