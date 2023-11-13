@@ -1,135 +1,135 @@
-import { Awareness, encodeAwarenessUpdate } from "y-protocols/awareness";
-import { messageYjsSyncStep1, messageYjsUpdate } from "y-protocols/sync";
-import * as Y from "yjs";
-import { JsonEncoder, writeAuthenticatedV2, writePermissionDeniedV2 } from "@hocuspocus/common";
-import Document from "./Document.js";
-import { MessageType } from "./types.js";
+import { Awareness, encodeAwarenessUpdate } from 'y-protocols/awareness'
+import { messageYjsSyncStep1, messageYjsUpdate } from 'y-protocols/sync'
+import * as Y from 'yjs'
+import { JsonEncoder, writeAuthenticatedV2, writePermissionDeniedV2 } from '@hocuspocus/common'
+import Document from './Document.js'
+import { MessageType } from './types.js'
 
 export class OutgoingMessageV2 {
-  jsonEncoder: JsonEncoder;
+  encoder: JsonEncoder
 
-  type?: number;
+  type?: number
 
-  category?: string;
+  category?: string
 
   constructor(documentName: string) {
-    this.jsonEncoder = new JsonEncoder();
+    this.encoder = new JsonEncoder()
 
-    this.jsonEncoder.write("documentName", documentName);
+    this.encoder.write('documentName', documentName)
   }
 
   createSyncMessage(): OutgoingMessageV2 {
-    this.type = MessageType.Sync;
+    this.type = MessageType.Sync
 
-    this.jsonEncoder.write("type", MessageType.Sync);
+    this.encoder.write('type', MessageType.Sync)
 
-    return this;
+    return this
   }
 
   createSyncReplyMessage(): OutgoingMessageV2 {
-    this.type = MessageType.SyncReply;
+    this.type = MessageType.SyncReply
 
-    this.jsonEncoder.write("type", MessageType.SyncReply);
+    this.encoder.write('type', MessageType.SyncReply)
 
-    return this;
+    return this
   }
 
   createAwarenessUpdateMessage(
     awareness: Awareness,
-    changedClients?: Array<any>
+    changedClients?: Array<any>,
   ): OutgoingMessageV2 {
-    this.type = MessageType.Awareness;
-    this.category = "Update";
+    this.type = MessageType.Awareness
+    this.category = 'Update'
 
     const message = encodeAwarenessUpdate(
       awareness,
-      changedClients || Array.from(awareness.getStates().keys())
-    );
+      changedClients || Array.from(awareness.getStates().keys()),
+    )
 
-    this.jsonEncoder.write("type", MessageType.Awareness);
-    this.jsonEncoder.write("message", message);
+    this.encoder.write('type', MessageType.Awareness)
+    this.encoder.write('message', message)
 
-    return this;
+    return this
   }
 
   writeQueryAwareness(): OutgoingMessageV2 {
-    this.type = MessageType.QueryAwareness;
-    this.category = "Update";
+    this.type = MessageType.QueryAwareness
+    this.category = 'Update'
 
-    this.jsonEncoder.write("type", MessageType.QueryAwareness);
+    this.encoder.write('type', MessageType.QueryAwareness)
 
-    return this;
+    return this
   }
 
   writeAuthenticated(readonly: boolean): OutgoingMessageV2 {
-    this.type = MessageType.Auth;
-    this.category = "Authenticated";
+    this.type = MessageType.Auth
+    this.category = 'Authenticated'
 
-    this.jsonEncoder.write("type", MessageType.Auth);
-    writeAuthenticatedV2(this.jsonEncoder, readonly ? "readonly" : "read-write");
+    this.encoder.write('type', MessageType.Auth)
+    writeAuthenticatedV2(this.encoder, readonly ? 'readonly' : 'read-write')
 
-    return this;
+    return this
   }
 
   writePermissionDenied(reason: string): OutgoingMessageV2 {
-    this.type = MessageType.Auth;
-    this.category = "PermissionDenied";
+    this.type = MessageType.Auth
+    this.category = 'PermissionDenied'
 
-    this.jsonEncoder.write("type", MessageType.Auth);
-    writePermissionDeniedV2(this.jsonEncoder, reason);
+    this.encoder.write('type', MessageType.Auth)
+    writePermissionDeniedV2(this.encoder, reason)
 
-    return this;
+    return this
   }
 
   writeFirstSyncStepFor(document: Document): OutgoingMessageV2 {
-    this.category = "SyncStep1";
+    this.category = 'SyncStep1'
 
-    this.jsonEncoder.write("stype", messageYjsSyncStep1);
+    this.encoder.write('stype', messageYjsSyncStep1)
 
-    const sv = Y.encodeStateVector(document);
-    this.jsonEncoder.write("sv", sv);
+    const sv = Y.encodeStateVector(document)
+    this.encoder.write('sv', sv)
 
-    return this;
+    return this
   }
 
   writeUpdate(update: Uint8Array): OutgoingMessageV2 {
-    this.category = "Update";
+    this.category = 'Update'
 
-    this.jsonEncoder.write("stype", messageYjsUpdate);
-    this.jsonEncoder.write("update", update);
+    this.encoder.write('stype', messageYjsUpdate)
+    this.encoder.write('update', update)
 
-    return this;
+    return this
   }
 
   writeStateless(payload: string): OutgoingMessageV2 {
-    this.category = "Stateless";
+    this.category = 'Stateless'
 
-    this.jsonEncoder.write("type", MessageType.Stateless);
-    this.jsonEncoder.write("payload", payload);
+    this.encoder.write('type', MessageType.Stateless)
+    this.encoder.write('payload', payload)
 
-    return this;
+    return this
   }
 
   writeBroadcastStateless(payload: string): OutgoingMessageV2 {
-    this.category = "Stateless";
+    this.category = 'Stateless'
 
-    this.jsonEncoder.write("type", MessageType.BroadcastStateless);
-    this.jsonEncoder.write("payload", payload);
+    this.encoder.write('type', MessageType.BroadcastStateless)
+    this.encoder.write('payload', payload)
 
-    return this;
+    return this
   }
 
   // TODO: should this be write* or create* as method name?
   writeSyncStatus(updateSaved: boolean): OutgoingMessageV2 {
-    this.category = "SyncStatus";
+    this.category = 'SyncStatus'
 
-    this.jsonEncoder.write("type", MessageType.SyncStatus);
-    this.jsonEncoder.write("updateSaved", updateSaved);
+    this.encoder.write('type', MessageType.SyncStatus)
+    this.encoder.write('updateSaved', updateSaved)
 
-    return this;
+    return this
   }
 
   toString(): string {
-    return this.jsonEncoder.toString();
+    return this.encoder.toString()
   }
 }

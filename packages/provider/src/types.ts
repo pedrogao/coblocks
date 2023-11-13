@@ -2,7 +2,7 @@ import { Encoder } from 'lib0/encoding'
 import type { Event, MessageEvent } from 'ws'
 import { Awareness } from 'y-protocols/awareness'
 import * as Y from 'yjs'
-import { CloseEvent } from '@hocuspocus/common'
+import { CloseEvent, JsonEncoder } from '@hocuspocus/common'
 import { IncomingMessage } from './IncomingMessage.js'
 import { OutgoingMessage } from './OutgoingMessage.js'
 import { AuthenticationMessage } from './OutgoingMessages/AuthenticationMessage.js'
@@ -11,6 +11,12 @@ import { QueryAwarenessMessage } from './OutgoingMessages/QueryAwarenessMessage.
 import { SyncStepOneMessage } from './OutgoingMessages/SyncStepOneMessage.js'
 import { SyncStepTwoMessage } from './OutgoingMessages/SyncStepTwoMessage.js'
 import { UpdateMessage } from './OutgoingMessages/UpdateMessage.js'
+import { AuthenticationMessageV2 } from './OutgoingMessagesV2/AuthenticationMessage.js'
+import { AwarenessMessageV2 } from './OutgoingMessagesV2/AwarenessMessage.js'
+import { QueryAwarenessMessageV2 } from './OutgoingMessagesV2/QueryAwarenessMessage.js'
+import { SyncStepOneMessageV2 } from './OutgoingMessagesV2/SyncStepOneMessage.js'
+import { SyncStepTwoMessageV2 } from './OutgoingMessagesV2/SyncStepTwoMessage.js'
+import { UpdateMessageV2 } from './OutgoingMessagesV2/UpdateMessage.js'
 
 export enum MessageType {
   Sync = 0,
@@ -29,80 +35,105 @@ export enum WebSocketStatus {
 }
 
 export interface OutgoingMessageInterface {
-  encoder: Encoder
-  type?: MessageType
+  encoder: Encoder;
+  type?: MessageType;
+}
+
+export interface OutgoingMessageInterfaceV2 {
+  encoder: JsonEncoder;
+  type?: MessageType;
 }
 
 export interface OutgoingMessageArguments {
-  documentName: string,
-  token: string,
-  document: Y.Doc,
-  awareness: Awareness,
-  clients: number[],
-  states: Map<number, { [key: string]: any; }>,
-  update: any,
-  payload: string,
-  encoder: Encoder,
+  documentName: string;
+  token: string;
+  document: Y.Doc;
+  awareness: Awareness;
+  clients: number[];
+  states: Map<number, { [key: string]: any }>;
+  update: any;
+  payload: string;
+  encoder: Encoder;
+}
+
+export interface OutgoingMessageArgumentsV2 {
+  documentName: string;
+  token: string;
+  document: Y.Doc;
+  awareness: Awareness;
+  clients: number[];
+  states: Map<number, { [key: string]: any }>;
+  update: any;
+  payload: string;
+  encoder: JsonEncoder;
 }
 
 export interface Constructable<T> {
-  new(...args: any) : T
+  new (...args: any): T;
 }
 
 export type ConstructableOutgoingMessage =
-  Constructable<AuthenticationMessage> |
-  Constructable<AwarenessMessage> |
-  Constructable<QueryAwarenessMessage> |
-  Constructable<SyncStepOneMessage> |
-  Constructable<SyncStepTwoMessage> |
-  Constructable<UpdateMessage>
+  | Constructable<AuthenticationMessage>
+  | Constructable<AwarenessMessage>
+  | Constructable<QueryAwarenessMessage>
+  | Constructable<SyncStepOneMessage>
+  | Constructable<SyncStepTwoMessage>
+  | Constructable<UpdateMessage>;
+
+export type ConstructableOutgoingMessageV2 =
+  | Constructable<AuthenticationMessageV2>
+  | Constructable<AwarenessMessageV2>
+  | Constructable<QueryAwarenessMessageV2>
+  | Constructable<SyncStepOneMessageV2>
+  | Constructable<SyncStepTwoMessageV2>
+  | Constructable<UpdateMessageV2>;
 
 export type onAuthenticationFailedParameters = {
-  reason: string,
-}
+  reason: string;
+};
 
 export type onOpenParameters = {
-  event: Event,
-}
+  event: Event;
+};
 
 export type onMessageParameters = {
-  event: MessageEvent,
-  message: IncomingMessage,
-}
+  event: MessageEvent;
+  message: IncomingMessage;
+};
 
 export type onOutgoingMessageParameters = {
-  message: OutgoingMessage,
-}
+  message: OutgoingMessage;
+};
 
 export type onStatusParameters = {
-  status: WebSocketStatus,
-}
+  status: WebSocketStatus;
+};
 
 export type onSyncedParameters = {
-  state: boolean,
-}
+  state: boolean;
+};
 
 export type onDisconnectParameters = {
-  event: CloseEvent,
-}
+  event: CloseEvent;
+};
 
 export type onCloseParameters = {
-  event: CloseEvent,
-}
+  event: CloseEvent;
+};
 
 export type onAwarenessUpdateParameters = {
-  states: StatesArray
-}
+  states: StatesArray;
+};
 
 export type onAwarenessChangeParameters = {
-  states: StatesArray
-}
+  states: StatesArray;
+};
 
 export type onStatelessParameters = {
-  payload: string
-}
+  payload: string;
+};
 
-export type StatesArray = { clientId: number, [key: string | number]: any }[]
+export type StatesArray = { clientId: number; [key: string | number]: any }[];
 
 // hocuspocus-pro types
 

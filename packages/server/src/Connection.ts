@@ -123,7 +123,7 @@ export class Connection {
         direction: 'out',
         type: 'error',
         category: 'send bu closed connection',
-      });
+      })
       this.close()
     }
 
