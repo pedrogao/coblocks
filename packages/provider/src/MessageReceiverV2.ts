@@ -49,8 +49,8 @@ export class MessageReceiverV2 {
         break
 
       case MessageType.SyncStatus: {
-        const stype = message.decoder.read('stype')
-        this.applySyncStatusMessage(provider, stype === 1)
+        const status = message.decoder.read('status')
+        this.applySyncStatusMessage(provider, status)
         break
       }
       default:

@@ -124,7 +124,7 @@ export class OutgoingMessageV2 {
     this.category = 'SyncStatus'
 
     this.encoder.write('type', MessageType.SyncStatus)
-    this.encoder.write('updateSaved', updateSaved)
+    this.encoder.write('status', updateSaved)
 
     return this
   }
