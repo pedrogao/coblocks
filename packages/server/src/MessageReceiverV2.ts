@@ -25,7 +25,7 @@ export class MessageReceiverV2 {
   public apply(document: Document, connection?: Connection, reply?: (message: string) => void) {
     const { message } = this
     const type = message.read('type')
-    const emptyMessageLength = message.length
+    // const emptyMessageLength = message.length
 
     switch (type) {
       case MessageType.Sync:
@@ -33,7 +33,7 @@ export class MessageReceiverV2 {
         message.writeType(MessageType.Sync)
         this.readSyncMessage(message, document, connection, reply, type !== MessageType.SyncReply)
 
-        if (message.length > emptyMessageLength + 1) {
+        if (message.canSend) {
           if (reply) {
             reply(message.toString())
           } else if (connection) {
@@ -99,7 +99,7 @@ export class MessageReceiverV2 {
 
       default:
         console.error(
-          `Unable to handle message of type ${type}: no handler defined! Are your provider/server versions aligned?`,
+          `Unable to handle message: ${message}: no handler defined! Are your provider/server versions aligned?`,
         )
       // Do nothing
     }

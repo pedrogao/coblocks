@@ -20,6 +20,10 @@ export class JsonEncoder {
     return this
   }
 
+  public keys(): string[] {
+    return Object.keys(this.encoder)
+  }
+
   toString(): string {
     return JSON.stringify(this.encoder)
   }

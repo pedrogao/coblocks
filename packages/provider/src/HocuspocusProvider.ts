@@ -443,19 +443,14 @@ export class HocuspocusProvider extends EventEmitter {
   }
 
   onMessage(event: MessageEvent) {
-    // const message = new IncomingMessage(event.data)
     const message = new IncomingMessageV2(event.data)
 
-    // const documentName = message.readVarString()
     const documentName = message.read('documentName')
 
-    // message.writeVarString(documentName)
     message.write('documentName', documentName)
 
-    // this.emit('message', { event, message: new IncomingMessage(event.data) })
     this.emit('message', { event, message: new IncomingMessageV2(event.data) })
 
-    // new MessageReceiver(message).apply(this, true)
     new MessageReceiverV2(message).apply(this, true)
   }
 

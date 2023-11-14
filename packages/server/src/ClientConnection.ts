@@ -230,7 +230,7 @@ export class ClientConnection {
       // which will always be authentication when sent from client -> server
       // decoding.readVarUint(tmpMsg.decoder)
       // const token = decoding.readVarString(tmpMsg.decoder)
-      const token = tmpMsg.read('payload')
+      const token = tmpMsg.read('scope')
 
       this.debuggerTool.log({
         direction: 'in',

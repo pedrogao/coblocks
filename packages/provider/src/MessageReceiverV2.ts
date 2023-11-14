@@ -25,7 +25,7 @@ export class MessageReceiverV2 {
     const { message } = this
     const type = message.readMessageType()
 
-    const emptyMessageLength = message.length()
+    // const emptyMessageLength = message.length()
 
     switch (type) {
       case MessageType.Sync:
@@ -57,8 +57,9 @@ export class MessageReceiverV2 {
         throw new Error(`Can’t apply message of unknown type: ${type}`)
     }
 
+    // FIXMED: `varint`'s length is `1` but not same as `JSON.stringify`'s length
     // Reply
-    if (message.length() > emptyMessageLength + 1) {
+    if (message.canSend) {
       // length of documentName (considered in emptyMessageLength plus length of yjs sync type, set in applySyncMessage)
       if (this.broadcasted) {
         // TODO: Some weird TypeScript error
