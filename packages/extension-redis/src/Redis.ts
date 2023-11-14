@@ -2,8 +2,8 @@ import RedisClient, { ClusterNode, ClusterOptions, RedisOptions } from 'ioredis'
 import Redlock from 'redlock'
 import { v4 as uuid } from 'uuid'
 import {
-  IncomingMessage,
-  OutgoingMessage,
+  IncomingMessageV2,
+  OutgoingMessageV2,
   Document,
   Extension,
   afterLoadDocumentPayload,
@@ -12,7 +12,7 @@ import {
   onStoreDocumentPayload,
   onAwarenessUpdatePayload,
   onChangePayload,
-  MessageReceiver,
+  MessageReceiverV2,
   Debugger,
   onConfigurePayload,
   beforeBroadcastStatelessPayload, Hocuspocus,
@@ -161,15 +161,15 @@ export class Redis implements Extension {
     return `${this.getKey(documentName)}:lock`
   }
 
-  private encodeMessage(message: Uint8Array) {
-    return Buffer.concat([this.messagePrefix, Buffer.from(message)])
+  private encodeMessage(message: string) {
+    return Buffer.concat([this.messagePrefix, Buffer.from(message, 'utf-8')])
   }
 
   private decodeMessage(buffer: Buffer) {
     const identifierLength = buffer[0]
     const identifier = buffer.toString('utf-8', 1, identifierLength + 1)
 
-    return [identifier, buffer.slice(identifierLength + 1)]
+    return [identifier, buffer.slice(identifierLength + 1).toString('utf-8')]
   }
 
   /**
@@ -197,23 +197,23 @@ export class Redis implements Extension {
    * Publish the first sync step through Redis.
    */
   private async publishFirstSyncStep(documentName: string, document: Document) {
-    const syncMessage = new OutgoingMessage(documentName)
+    const syncMessage = new OutgoingMessageV2(documentName)
       .createSyncMessage()
       .writeFirstSyncStepFor(document)
 
-    return this.pub.publishBuffer(this.pubKey(documentName), this.encodeMessage(syncMessage.toUint8Array()))
+    return this.pub.publishBuffer(this.pubKey(documentName), this.encodeMessage(syncMessage.toString()))
   }
 
   /**
    * Let’s ask Redis who is connected already.
    */
   private async requestAwarenessFromOtherInstances(documentName: string) {
-    const awarenessMessage = new OutgoingMessage(documentName)
+    const awarenessMessage = new OutgoingMessageV2(documentName)
       .writeQueryAwareness()
 
     return this.pub.publishBuffer(
       this.pubKey(documentName),
-      this.encodeMessage(awarenessMessage.toUint8Array()),
+      this.encodeMessage(awarenessMessage.toString()),
     )
   }
 
@@ -261,12 +261,12 @@ export class Redis implements Extension {
     documentName, awareness, added, updated, removed,
   }: onAwarenessUpdatePayload) {
     const changedClients = added.concat(updated, removed)
-    const message = new OutgoingMessage(documentName)
+    const message = new OutgoingMessageV2(documentName)
       .createAwarenessUpdateMessage(awareness, changedClients)
 
     return this.pub.publishBuffer(
       this.pubKey(documentName),
-      this.encodeMessage(message.toUint8Array()),
+      this.encodeMessage(message.toString()),
     )
   }
 
@@ -282,9 +282,9 @@ export class Redis implements Extension {
       return
     }
 
-    const message = new IncomingMessage(messageBuffer)
-    const documentName = message.readVarString()
-    message.writeVarString(documentName)
+    const message = new IncomingMessageV2(messageBuffer)
+    const documentName = message.read('documentName')
+    message.write('documentName', documentName)
 
     const document = this.instance.documents.get(documentName)
 
@@ -294,7 +294,7 @@ export class Redis implements Extension {
       return
     }
 
-    new MessageReceiver(
+    new MessageReceiverV2(
       message,
       this.logger,
       this.redisTransactionOrigin,
@@ -340,12 +340,12 @@ export class Redis implements Extension {
   }
 
   async beforeBroadcastStateless(data: beforeBroadcastStatelessPayload) {
-    const message = new OutgoingMessage(data.documentName)
+    const message = new OutgoingMessageV2(data.documentName)
       .writeBroadcastStateless(data.payload)
 
     return this.pub.publishBuffer(
       this.pubKey(data.documentName),
-      this.encodeMessage(message.toUint8Array()),
+      this.encodeMessage(message.toString()),
     )
   }
 
