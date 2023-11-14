@@ -3,16 +3,14 @@ import { URLSearchParams } from 'url'
 import {
   Forbidden, Unauthorized, WsReadyStates,
 } from '@hocuspocus/common'
-import * as decoding from 'lib0/decoding'
 import { v4 as uuid } from 'uuid'
 import WebSocket from 'ws'
-
 import Connection from './Connection.js'
 import { Debugger } from './Debugger.js'
 import Document from './Document.js'
 import { Hocuspocus } from './Hocuspocus.js'
-import { IncomingMessage as SocketIncomingMessage } from './IncomingMessage.js'
-import { OutgoingMessage } from './OutgoingMessage.js'
+import { IncomingMessageV2 as SocketIncomingMessage } from './IncomingMessageV2.js'
+import { OutgoingMessageV2 } from './OutgoingMessageV2.js'
 import {
   ConnectionConfiguration,
   MessageType,
@@ -33,7 +31,7 @@ export class ClientConnection {
 
   // While the connection will be establishing messages will
   // be queued and handled later.
-  private readonly incomingMessageQueue: Record<string, Uint8Array[]> = {}
+  private readonly incomingMessageQueue: Record<string, Buffer[]> = {}
 
   // While the connection is establishing, kee
   private readonly documentConnectionsEstablished = new Set<string>()
@@ -213,12 +211,12 @@ export class ClientConnection {
   }
 
   // This listener handles authentication messages and queues everything else.
-  private handleQueueingMessage = async (data: Uint8Array) => {
+  private handleQueueingMessage = async (data: Buffer) => {
     try {
       const tmpMsg = new SocketIncomingMessage(data)
 
-      const documentName = decoding.readVarString(tmpMsg.decoder)
-      const type = decoding.readVarUint(tmpMsg.decoder)
+      const documentName = tmpMsg.read('documentName')
+      const type = tmpMsg.read('type')
 
       if (!(type === MessageType.Auth && !this.documentConnectionsEstablished.has(documentName))) {
         this.incomingMessageQueue[documentName].push(data)
@@ -230,8 +228,9 @@ export class ClientConnection {
 
       // The 2nd integer contains the submessage type
       // which will always be authentication when sent from client -> server
-      decoding.readVarUint(tmpMsg.decoder)
-      const token = decoding.readVarString(tmpMsg.decoder)
+      // decoding.readVarUint(tmpMsg.decoder)
+      // const token = decoding.readVarString(tmpMsg.decoder)
+      const token = tmpMsg.read('payload')
 
       this.debuggerTool.log({
         direction: 'in',
@@ -254,7 +253,7 @@ export class ClientConnection {
         hookPayload.connection.isAuthenticated = true
 
         // Let the client know that authentication was successful.
-        const message = new OutgoingMessage(documentName).writeAuthenticated(hookPayload.connection.readOnly)
+        const message = new OutgoingMessageV2(documentName).writeAuthenticated(hookPayload.connection.readOnly)
 
         this.debuggerTool.log({
           direction: 'out',
@@ -262,13 +261,13 @@ export class ClientConnection {
           category: message.category,
         })
 
-        this.websocket.send(message.toUint8Array())
+        this.websocket.send(message.toString())
 
         // Time to actually establish the connection.
         await this.setUpNewConnection(documentName)
       } catch (err: any) {
         const error = err || Forbidden
-        const message = new OutgoingMessage(documentName).writePermissionDenied(error.reason ?? 'permission-denied')
+        const message = new OutgoingMessageV2(documentName).writePermissionDenied(error.reason ?? 'permission-denied')
 
         this.debuggerTool.log({
           direction: 'out',
@@ -276,7 +275,7 @@ export class ClientConnection {
           category: message.category,
         })
 
-        this.websocket.send(message.toUint8Array())
+        this.websocket.send(message.toString())
       }
 
       // Catch errors due to failed decoding of data
@@ -286,11 +285,12 @@ export class ClientConnection {
     }
   }
 
-  private messageHandler = async (data: Uint8Array) => {
+  private messageHandler = async (data: Buffer) => {
     try {
       const tmpMsg = new SocketIncomingMessage(data)
 
-      const documentName = decoding.readVarString(tmpMsg.decoder)
+      // const documentName = decoding.readVarString(tmpMsg.decoder)
+      const documentName = tmpMsg.read('documentName')
 
       const connection = this.documentConnections[documentName]
       if (connection) {

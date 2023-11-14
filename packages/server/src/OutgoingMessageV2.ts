@@ -41,13 +41,13 @@ export class OutgoingMessageV2 {
     this.type = MessageType.Awareness
     this.category = 'Update'
 
-    const message = encodeAwarenessUpdate(
+    const awarenessEncoded = encodeAwarenessUpdate(
       awareness,
       changedClients || Array.from(awareness.getStates().keys()),
     )
 
     this.encoder.write('type', MessageType.Awareness)
-    this.encoder.write('message', message)
+    this.encoder.write('awareness', awarenessEncoded)
 
     return this
   }

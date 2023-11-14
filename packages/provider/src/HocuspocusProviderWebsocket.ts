@@ -13,7 +13,7 @@ import {
   onAwarenessChangeParameters, onAwarenessUpdateParameters,
   onCloseParameters, onDisconnectParameters, onMessageParameters, onOpenParameters, onOutgoingMessageParameters, onStatusParameters,
 } from './types.js'
-import { IncomingMessage } from './IncomingMessage.js'
+import { IncomingMessageV2 } from './IncomingMessageV2.js'
 
 export type HocusPocusWebSocket = WebSocket & { identifier: string };
 
@@ -371,8 +371,10 @@ export class HocuspocusProviderWebsocket extends EventEmitter {
 
     this.lastMessageReceived = time.getUnixTime()
 
-    const message = new IncomingMessage(event.data)
-    const documentName = message.peekVarString()
+    // const message = new IncomingMessage(event.data)
+    const message = new IncomingMessageV2(event.data)
+    // const documentName = message.peekVarString()
+    const documentName = message.peek('documentName')
 
     this.configuration.providerMap.get(documentName)?.onMessage(event)
   }

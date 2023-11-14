@@ -5,11 +5,11 @@ import {
   CloseEvent, ConnectionTimeout, Forbidden, WsReadyStates,
 } from '@hocuspocus/common'
 import Document from './Document.js'
-import { IncomingMessage } from './IncomingMessage.js'
-import { OutgoingMessage } from './OutgoingMessage.js'
-import { MessageReceiver } from './MessageReceiver.js'
+import { IncomingMessageV2 } from './IncomingMessageV2.js'
+import { OutgoingMessageV2 } from './OutgoingMessageV2.js'
 import { Debugger } from './Debugger.js'
 import { onStatelessPayload } from './types.js'
+import { MessageReceiverV2 } from './MessageReceiverV2.js'
 
 export class Connection {
 
@@ -29,7 +29,7 @@ export class Connection {
 
   callbacks: any = {
     onClose: [(document: Document, event?: CloseEvent) => null],
-    beforeHandleMessage: (connection: Connection, update: Uint8Array) => Promise,
+    beforeHandleMessage: (connection: Connection, update: string) => Promise,
     statelessCallback: () => Promise,
   }
 
@@ -140,7 +140,7 @@ export class Connection {
    * Send a stateless message with payload
    */
   public sendStateless(payload: string): void {
-    const message = new OutgoingMessage(this.document.name)
+    const message = new OutgoingMessageV2(this.document.name)
       .writeStateless(payload)
 
     this.logger.log({
@@ -150,7 +150,7 @@ export class Connection {
     })
 
     this.send(
-      message.toUint8Array(),
+      message.toString(),
     )
   }
 
@@ -204,7 +204,7 @@ export class Connection {
       return
     }
 
-    const awarenessMessage = new OutgoingMessage(this.document.name)
+    const awarenessMessage = new OutgoingMessageV2(this.document.name)
       .createAwarenessUpdateMessage(this.document.awareness)
 
     this.logger.log({
@@ -213,24 +213,24 @@ export class Connection {
       category: awarenessMessage.category,
     })
 
-    this.send(awarenessMessage.toUint8Array())
+    this.send(awarenessMessage.toString())
   }
 
   /**
    * Handle an incoming message
    * @public
    */
-  public handleMessage(data: Uint8Array): void {
-    const message = new IncomingMessage(data)
-    const documentName = message.readVarString()
+  public handleMessage(data: Buffer): void {
+    const message = new IncomingMessageV2(data)
+    const documentName = message.read('documentName')
 
     if (documentName !== this.document.name) return
 
-    message.writeVarString(documentName)
+    message.write('documentName', documentName)
 
     this.callbacks.beforeHandleMessage(this, data)
       .then(() => {
-        new MessageReceiver(
+        new MessageReceiverV2(
           message,
           this.logger,
         ).apply(this.document, this)

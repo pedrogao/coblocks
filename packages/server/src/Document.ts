@@ -4,7 +4,7 @@ import { applyUpdate, Doc, encodeStateAsUpdate } from 'yjs'
 import { mutex, createMutex } from 'lib0/mutex.js'
 import { AwarenessUpdate } from './types.js'
 import Connection from './Connection.js'
-import { OutgoingMessage } from './OutgoingMessage.js'
+import { OutgoingMessageV2 } from './OutgoingMessageV2.js'
 import { Debugger } from './Debugger.js'
 
 export class Document extends Doc {
@@ -203,7 +203,7 @@ export class Document extends Doc {
     }
 
     this.getConnections().forEach(connection => {
-      const awarenessMessage = new OutgoingMessage(this.name)
+      const awarenessMessage = new OutgoingMessageV2(this.name)
         .createAwarenessUpdateMessage(this.awareness, changedClients)
 
       this.logger.log({
@@ -213,7 +213,7 @@ export class Document extends Doc {
       })
 
       connection.send(
-        awarenessMessage.toUint8Array(),
+        awarenessMessage.toString(),
       )
     })
 
@@ -226,7 +226,7 @@ export class Document extends Doc {
   private handleUpdate(update: Uint8Array, connection: Connection): Document {
     this.callbacks.onUpdate(this, connection, update)
 
-    const message = new OutgoingMessage(this.name)
+    const message = new OutgoingMessageV2(this.name)
       .createSyncMessage()
       .writeUpdate(update)
 
@@ -238,7 +238,7 @@ export class Document extends Doc {
       })
 
       connection.send(
-        message.toUint8Array(),
+        message.toString(),
       )
     })
 

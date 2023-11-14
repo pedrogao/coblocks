@@ -9,19 +9,11 @@ import {
   CompleteHocuspocusProviderWebsocketConfiguration,
   HocuspocusProviderWebsocket,
 } from './HocuspocusProviderWebsocket.js'
-import { IncomingMessage } from './IncomingMessage.js'
-import { MessageReceiver } from './MessageReceiver.js'
-import { MessageSender } from './MessageSender.js'
-import { AuthenticationMessage } from './OutgoingMessages/AuthenticationMessage.js'
-import { AwarenessMessage } from './OutgoingMessages/AwarenessMessage.js'
-import { CloseMessage } from './OutgoingMessages/CloseMessage.js'
-import { QueryAwarenessMessage } from './OutgoingMessages/QueryAwarenessMessage.js'
-import { StatelessMessage } from './OutgoingMessages/StatelessMessage.js'
-import { SyncStepOneMessage } from './OutgoingMessages/SyncStepOneMessage.js'
-import { SyncStepTwoMessage } from './OutgoingMessages/SyncStepTwoMessage.js'
-import { UpdateMessage } from './OutgoingMessages/UpdateMessage.js'
+import { IncomingMessageV2 } from './IncomingMessageV2.js'
+import { MessageReceiverV2 } from './MessageReceiverV2.js'
+import { MessageSenderV2 } from './MessageSenderV2.js'
+import { CloseMessageV2 } from './OutgoingMessagesV2/CloseMessage.js'
 import {
-  ConstructableOutgoingMessage,
   WebSocketStatus,
   onAuthenticationFailedParameters,
   onAwarenessChangeParameters,
@@ -33,7 +25,15 @@ import {
   onOutgoingMessageParameters, onStatelessParameters,
   onStatusParameters,
   onSyncedParameters,
+  ConstructableOutgoingMessageV2,
 } from './types.js'
+import { SyncStepOneMessageV2 } from './OutgoingMessagesV2/SyncStepOneMessage.js'
+import { StatelessMessageV2 } from './OutgoingMessagesV2/StatelessMessage.js'
+import { UpdateMessageV2 } from './OutgoingMessagesV2/UpdateMessage.js'
+import { AwarenessMessageV2 } from './OutgoingMessagesV2/AwarenessMessage.js'
+import { AuthenticationMessageV2 } from './OutgoingMessagesV2/AuthenticationMessage.js'
+import { SyncStepTwoMessageV2 } from './OutgoingMessagesV2/SyncStepTwoMessage.js'
+import { QueryAwarenessMessageV2 } from './OutgoingMessagesV2/QueryAwarenessMessage.js'
 
 export type HocuspocusProviderConfiguration =
   Required<Pick<CompleteHocuspocusProviderConfiguration, 'name'>>
@@ -293,7 +293,7 @@ export class HocuspocusProvider extends EventEmitter {
   }
 
   forceSync() {
-    this.send(SyncStepOneMessage, { document: this.document, documentName: this.configuration.name })
+    this.send(SyncStepOneMessageV2, { document: this.document, documentName: this.configuration.name })
   }
 
   pageUnload() {
@@ -311,7 +311,7 @@ export class HocuspocusProvider extends EventEmitter {
   }
 
   sendStateless(payload: string) {
-    this.send(StatelessMessage, { documentName: this.configuration.name, payload })
+    this.send(StatelessMessageV2, { documentName: this.configuration.name, payload })
   }
 
   documentUpdateHandler(update: Uint8Array, origin: any) {
@@ -320,13 +320,13 @@ export class HocuspocusProvider extends EventEmitter {
     }
 
     this.incrementUnsyncedChanges()
-    this.send(UpdateMessage, { update, documentName: this.configuration.name }, true)
+    this.send(UpdateMessageV2, { update, documentName: this.configuration.name }, true)
   }
 
   awarenessUpdateHandler({ added, updated, removed }: any, origin: any) {
     const changedClients = added.concat(updated).concat(removed)
 
-    this.send(AwarenessMessage, {
+    this.send(AwarenessMessageV2, {
       awareness: this.awareness,
       clients: changedClients,
       documentName: this.configuration.name,
@@ -396,7 +396,7 @@ export class HocuspocusProvider extends EventEmitter {
     }
 
     if (this.isAuthenticationRequired) {
-      this.send(AuthenticationMessage, {
+      this.send(AuthenticationMessageV2, {
         token,
         documentName: this.configuration.name,
       })
@@ -416,10 +416,10 @@ export class HocuspocusProvider extends EventEmitter {
 
   startSync() {
     this.incrementUnsyncedChanges()
-    this.send(SyncStepOneMessage, { document: this.document, documentName: this.configuration.name })
+    this.send(SyncStepOneMessageV2, { document: this.document, documentName: this.configuration.name })
 
     if (this.awareness && this.awareness.getLocalState() !== null) {
-      this.send(AwarenessMessage, {
+      this.send(AwarenessMessageV2, {
         awareness: this.awareness,
         clients: [this.document.clientID],
         documentName: this.configuration.name,
@@ -427,7 +427,7 @@ export class HocuspocusProvider extends EventEmitter {
     }
   }
 
-  send(message: ConstructableOutgoingMessage, args: any, broadcast = false) {
+  send(message: ConstructableOutgoingMessageV2, args: any, broadcast = false) {
     if (!this.isConnected) {
       return
     }
@@ -436,22 +436,27 @@ export class HocuspocusProvider extends EventEmitter {
       this.mux(() => { this.broadcast(message, args) })
     }
 
-    const messageSender = new MessageSender(message, args)
+    const messageSender = new MessageSenderV2(message, args)
 
     this.emit('outgoingMessage', { message: messageSender.message })
     messageSender.send(this.configuration.websocketProvider)
   }
 
   onMessage(event: MessageEvent) {
-    const message = new IncomingMessage(event.data)
+    // const message = new IncomingMessage(event.data)
+    const message = new IncomingMessageV2(event.data)
 
-    const documentName = message.readVarString()
+    // const documentName = message.readVarString()
+    const documentName = message.read('documentName')
 
-    message.writeVarString(documentName)
+    // message.writeVarString(documentName)
+    message.write('documentName', documentName)
 
-    this.emit('message', { event, message: new IncomingMessage(event.data) })
+    // this.emit('message', { event, message: new IncomingMessage(event.data) })
+    this.emit('message', { event, message: new IncomingMessageV2(event.data) })
 
-    new MessageReceiver(message).apply(this, true)
+    // new MessageReceiver(message).apply(this, true)
+    new MessageReceiverV2(message).apply(this, true)
   }
 
   onClose(event: CloseEvent) {
@@ -497,7 +502,7 @@ export class HocuspocusProvider extends EventEmitter {
     this.configuration.websocketProvider.off('destroy', this.configuration.onDestroy)
     this.configuration.websocketProvider.off('destroy', this.forwardDestroy)
 
-    this.send(CloseMessage, { documentName: this.configuration.name })
+    this.send(CloseMessageV2, { documentName: this.configuration.name })
     this.disconnect()
 
     if (typeof window === 'undefined') {
@@ -528,13 +533,15 @@ export class HocuspocusProvider extends EventEmitter {
 
   broadcastChannelSubscriber(data: ArrayBuffer) {
     this.mux(() => {
-      const message = new IncomingMessage(data)
+      const message = new IncomingMessageV2(data)
 
-      const documentName = message.readVarString()
+      // const documentName = message.readVarString()
+      const documentName = message.read('documentName')
 
-      message.writeVarString(documentName)
+      message.write('documentName', documentName)
+      // message.writeVarString(documentName)
 
-      new MessageReceiver(message)
+      new MessageReceiverV2(message)
         .setBroadcasted(true)
         .apply(this, false)
     })
@@ -547,11 +554,11 @@ export class HocuspocusProvider extends EventEmitter {
     }
 
     this.mux(() => {
-      this.broadcast(SyncStepOneMessage, { document: this.document, documentName: this.configuration.name })
-      this.broadcast(SyncStepTwoMessage, { document: this.document, documentName: this.configuration.name })
-      this.broadcast(QueryAwarenessMessage, { document: this.document, documentName: this.configuration.name })
+      this.broadcast(SyncStepOneMessageV2, { document: this.document, documentName: this.configuration.name })
+      this.broadcast(SyncStepTwoMessageV2, { document: this.document, documentName: this.configuration.name })
+      this.broadcast(QueryAwarenessMessageV2, { document: this.document, documentName: this.configuration.name })
       if (this.awareness) {
-        this.broadcast(AwarenessMessage, {
+        this.broadcast(AwarenessMessageV2, {
           awareness: this.awareness,
           clients: [this.document.clientID],
           document: this.document,
@@ -564,7 +571,7 @@ export class HocuspocusProvider extends EventEmitter {
   disconnectBroadcastChannel() {
     // broadcast message with local awareness state set to null (indicating disconnect)
     if (this.awareness) {
-      this.send(AwarenessMessage, {
+      this.send(AwarenessMessageV2, {
         awareness: this.awareness,
         clients: [this.document.clientID],
         states: new Map(),
@@ -578,7 +585,7 @@ export class HocuspocusProvider extends EventEmitter {
     }
   }
 
-  broadcast(Message: ConstructableOutgoingMessage, args?: any) {
+  broadcast(Message: ConstructableOutgoingMessageV2, args?: any) {
     if (!this.configuration.broadcast) {
       return
     }
@@ -587,7 +594,7 @@ export class HocuspocusProvider extends EventEmitter {
       return
     }
 
-    new MessageSender(Message, args).broadcast(this.broadcastChannel)
+    new MessageSenderV2(Message, args).broadcast(this.broadcastChannel)
   }
 
   setAwarenessField(key: string, value: any) {
