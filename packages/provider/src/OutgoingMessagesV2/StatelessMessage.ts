@@ -7,7 +7,7 @@ export class StatelessMessageV2 extends OutgoingMessageV2 {
   description = 'A stateless message'
 
   get(args: Partial<OutgoingMessageArgumentsV2>) {
-    this.encoder.write('documentName', args.documentName!)
+    this.encoder.write('d', args.documentName!)
     this.encoder.write('type', this.type)
     this.encoder.write('payload', args.payload ?? '')
 

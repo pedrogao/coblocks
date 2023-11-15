@@ -15,7 +15,7 @@ test('outgoing message createSyncMessage', async t => {
   t.is(message.type, MessageType.Sync)
 
   const serialized = message.toString()
-  t.is(serialized, '{"documentName":"test","type":0}')
+  t.is(serialized, '{"d":"test","type":0}')
 
   t.pass()
 })
@@ -28,7 +28,7 @@ test('outgoing message writePermissionDenied', async t => {
   t.is(message.type, MessageType.Auth)
 
   const serialized = message.toString()
-  t.is(serialized, '{"documentName":"test","type":2,"auth":1,"reason":"just for testing"}')
+  t.is(serialized, '{"d":"test","type":2,"auth":1,"reason":"just for testing"}')
 
   t.pass()
 })
@@ -42,7 +42,7 @@ test('outgoing message writeUpdate', async t => {
   t.is(message.category, 'Update')
 
   const serialized = message.toString()
-  t.is(serialized, '{"documentName":"test","stype":2,"update":"anVzdCBmb3IgdGVzdGluZw=="}')
+  t.is(serialized, '{"d":"test","stype":2,"update":"anVzdCBmb3IgdGVzdGluZw=="}')
 
   t.pass()
 })
@@ -56,7 +56,7 @@ test('incoming message read', async t => {
   t.is(message.category, 'Update')
 
   const serialized = message.toString()
-  t.is(serialized, '{"documentName":"test","stype":2,"update":"anVzdCBmb3IgdGVzdGluZw=="}')
+  t.is(serialized, '{"d":"test","stype":2,"update":"anVzdCBmb3IgdGVzdGluZw=="}')
 
   const incoming = new IncomingMessageV2(serialized)
   t.is(incoming.read('stype'), 2)

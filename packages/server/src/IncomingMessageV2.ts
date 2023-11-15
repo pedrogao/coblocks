@@ -51,8 +51,8 @@ export class IncomingMessageV2 {
 
   get canSend(): boolean {
     const keys = this.encoder.keys()
-    const noSend = (keys.length === 2 && keys.includes('type') && keys.includes('documentName'))
-      || (keys.length === 1 && keys.includes('documentName'))
+    const noSend = (keys.length === 2 && keys.includes('type') && keys.includes('d'))
+      || (keys.length === 1 && keys.includes('d'))
     return !noSend
   }
 }

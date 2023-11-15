@@ -215,7 +215,7 @@ export class ClientConnection {
     try {
       const tmpMsg = new SocketIncomingMessage(data)
 
-      const documentName = tmpMsg.read('documentName')
+      const documentName = tmpMsg.read('d')
       const type = tmpMsg.read('type')
 
       if (!(type === MessageType.Auth && !this.documentConnectionsEstablished.has(documentName))) {
@@ -290,7 +290,7 @@ export class ClientConnection {
       const tmpMsg = new SocketIncomingMessage(data)
 
       // const documentName = decoding.readVarString(tmpMsg.decoder)
-      const documentName = tmpMsg.read('documentName')
+      const documentName = tmpMsg.read('d')
 
       const connection = this.documentConnections[documentName]
       if (connection) {

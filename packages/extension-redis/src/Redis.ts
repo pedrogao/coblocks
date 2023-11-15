@@ -283,8 +283,8 @@ export class Redis implements Extension {
     }
 
     const message = new IncomingMessageV2(messageBuffer)
-    const documentName = message.read('documentName')
-    message.write('documentName', documentName)
+    const documentName = message.read('d')
+    message.write('d', documentName)
 
     const document = this.instance.documents.get(documentName)
 

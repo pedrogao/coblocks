@@ -445,9 +445,9 @@ export class HocuspocusProvider extends EventEmitter {
   onMessage(event: MessageEvent) {
     const message = new IncomingMessageV2(event.data)
 
-    const documentName = message.read('documentName')
+    const documentName = message.read('d')
 
-    message.write('documentName', documentName)
+    message.write('d', documentName)
 
     this.emit('message', { event, message: new IncomingMessageV2(event.data) })
 
@@ -531,9 +531,9 @@ export class HocuspocusProvider extends EventEmitter {
       const message = new IncomingMessageV2(data)
 
       // const documentName = message.readVarString()
-      const documentName = message.read('documentName')
+      const documentName = message.read('d')
 
-      message.write('documentName', documentName)
+      message.write('d', documentName)
       // message.writeVarString(documentName)
 
       new MessageReceiverV2(message)

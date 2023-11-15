@@ -16,7 +16,7 @@ export class AwarenessMessageV2 extends OutgoingMessageV2 {
       throw new Error('The awareness message requires clients as an argument')
     }
 
-    this.encoder.write('documentName', args.documentName!)
+    this.encoder.write('d', args.documentName!)
     this.encoder.write('type', this.type)
 
     let awarenessUpdate

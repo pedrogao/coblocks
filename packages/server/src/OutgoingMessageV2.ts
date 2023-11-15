@@ -15,7 +15,7 @@ export class OutgoingMessageV2 {
   constructor(documentName: string) {
     this.encoder = new JsonEncoder()
 
-    this.encoder.write('documentName', documentName)
+    this.encoder.write('d', documentName)
   }
 
   createSyncMessage(): OutgoingMessageV2 {

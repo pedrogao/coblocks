@@ -12,7 +12,7 @@ export class AuthenticationMessageV2 extends OutgoingMessageV2 {
       throw new Error('The authentication message requires `token` as an argument.')
     }
 
-    this.encoder.write('documentName', args.documentName!)
+    this.encoder.write('d', args.documentName!)
     this.encoder.write('type', this.type)
     writeAuthenticationV2(this.encoder, args.token as any)
 

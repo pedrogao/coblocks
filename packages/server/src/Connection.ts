@@ -222,11 +222,11 @@ export class Connection {
    */
   public handleMessage(data: Buffer): void {
     const message = new IncomingMessageV2(data)
-    const documentName = message.read('documentName')
+    const documentName = message.read('d')
 
     if (documentName !== this.document.name) return
 
-    message.write('documentName', documentName)
+    message.write('d', documentName)
 
     this.callbacks.beforeHandleMessage(this, data)
       .then(() => {

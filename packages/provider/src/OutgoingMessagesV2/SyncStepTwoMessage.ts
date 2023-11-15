@@ -13,7 +13,7 @@ export class SyncStepTwoMessageV2 extends OutgoingMessageV2 {
       throw new Error('The sync step two message requires document as an argument')
     }
 
-    this.encoder.write('documentName', args.documentName!)
+    this.encoder.write('d', args.documentName!)
     this.encoder.write('type', this.type)
 
     this.encoder.write('stype', syncProtocol.messageYjsSyncStep2)

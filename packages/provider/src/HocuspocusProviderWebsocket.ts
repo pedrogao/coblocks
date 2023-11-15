@@ -10,92 +10,99 @@ import EventEmitter from './EventEmitter.js'
 import { HocuspocusProvider } from './HocuspocusProvider.js'
 import {
   WebSocketStatus,
-  onAwarenessChangeParameters, onAwarenessUpdateParameters,
-  onCloseParameters, onDisconnectParameters, onMessageParameters, onOpenParameters, onOutgoingMessageParameters, onStatusParameters,
+  onAwarenessChangeParameters,
+  onAwarenessUpdateParameters,
+  onCloseParameters,
+  onDisconnectParameters,
+  onMessageParameters,
+  onOpenParameters,
+  onOutgoingMessageParameters,
+  onStatusParameters,
 } from './types.js'
 import { IncomingMessageV2 } from './IncomingMessageV2.js'
 
 export type HocusPocusWebSocket = WebSocket & { identifier: string };
 
-export type HocuspocusProviderWebsocketConfiguration =
-  Required<Pick<CompleteHocuspocusProviderWebsocketConfiguration, 'url'>>
-  & Partial<CompleteHocuspocusProviderWebsocketConfiguration>
+export type HocuspocusProviderWebsocketConfiguration = Required<
+  Pick<CompleteHocuspocusProviderWebsocketConfiguration, 'url'>
+> &
+  Partial<CompleteHocuspocusProviderWebsocketConfiguration>;
 
 export interface CompleteHocuspocusProviderWebsocketConfiguration {
   /**
    * URL of your @hocuspocus/server instance
    */
-   url: string,
+  url: string;
 
   /**
    * Pass `false` to start the connection manually.
    */
-  connect: boolean,
+  connect: boolean;
 
   /**
    * URL parameters that should be added.
    */
-  parameters: { [key: string]: any },
+  parameters: { [key: string]: any };
   /**
    * An optional WebSocket polyfill, for example for Node.js
    */
-  WebSocketPolyfill: any,
+  WebSocketPolyfill: any;
 
   /**
    * Disconnect when no message is received for the defined amount of milliseconds.
    */
-  messageReconnectTimeout: number,
+  messageReconnectTimeout: number;
   /**
    * The delay between each attempt in milliseconds. You can provide a factor to have the delay grow exponentially.
    */
-  delay: number,
+  delay: number;
   /**
    * The intialDelay is the amount of time to wait before making the first attempt. This option should typically be 0 since you typically want the first attempt to happen immediately.
    */
-  initialDelay: number,
+  initialDelay: number;
   /**
    * The factor option is used to grow the delay exponentially.
    */
-  factor: number,
+  factor: number;
   /**
    * The maximum number of attempts or 0 if there is no limit on number of attempts.
    */
-  maxAttempts: number,
+  maxAttempts: number;
   /**
    * minDelay is used to set a lower bound of delay when jitter is enabled. This property has no effect if jitter is disabled.
    */
-  minDelay: number,
+  minDelay: number;
   /**
    * The maxDelay option is used to set an upper bound for the delay when factor is enabled. A value of 0 can be provided if there should be no upper bound when calculating delay.
    */
-  maxDelay: number,
+  maxDelay: number;
   /**
    * If jitter is true then the calculated delay will be a random integer value between minDelay and the calculated delay for the current iteration.
    */
-  jitter: boolean,
+  jitter: boolean;
   /**
    * A timeout in milliseconds. If timeout is non-zero then a timer is set using setTimeout. If the timeout is triggered then future attempts will be aborted.
    */
-  timeout: number,
-  onOpen: (data: onOpenParameters) => void,
-  onConnect: () => void,
-  onMessage: (data: onMessageParameters) => void,
-  onOutgoingMessage: (data: onOutgoingMessageParameters) => void,
-  onStatus: (data: onStatusParameters) => void,
-  onDisconnect: (data: onDisconnectParameters) => void,
-  onClose: (data: onCloseParameters) => void,
-  onDestroy: () => void,
-  onAwarenessUpdate: (data: onAwarenessUpdateParameters) => void,
-  onAwarenessChange: (data: onAwarenessChangeParameters) => void,
+  timeout: number;
+  onOpen: (data: onOpenParameters) => void;
+  onConnect: () => void;
+  onMessage: (data: onMessageParameters) => void;
+  onOutgoingMessage: (data: onOutgoingMessageParameters) => void;
+  onStatus: (data: onStatusParameters) => void;
+  onDisconnect: (data: onDisconnectParameters) => void;
+  onClose: (data: onCloseParameters) => void;
+  onDestroy: () => void;
+  onAwarenessUpdate: (data: onAwarenessUpdateParameters) => void;
+  onAwarenessChange: (data: onAwarenessChangeParameters) => void;
   /**
    * Don’t output any warnings.
    */
-  quiet: boolean,
+  quiet: boolean;
 
   /**
    * Map of attached providers keyed by documentName.
    */
-  providerMap: Map<string, HocuspocusProvider>,
+  providerMap: Map<string, HocuspocusProvider>;
 }
 
 export class HocuspocusProviderWebsocket extends EventEmitter {
@@ -374,7 +381,7 @@ export class HocuspocusProviderWebsocket extends EventEmitter {
     // const message = new IncomingMessage(event.data)
     const message = new IncomingMessageV2(event.data)
     // const documentName = message.peekVarString()
-    const documentName = message.peek('documentName')
+    const documentName = message.peek('d')
 
     this.configuration.providerMap.get(documentName)?.onMessage(event)
   }
@@ -463,11 +470,18 @@ export class HocuspocusProviderWebsocket extends EventEmitter {
       return
     }
 
+    if (this.messageQueue.length > 0) {
+      console.warn(
+        '[HocuspocusWebsocketProvider] Closing connection with pending messages',
+        this.messageQueue.length,
+      )
+    }
+
     try {
       this.webSocket.close()
       this.messageQueue = []
-    } catch {
-      //
+    } catch (err) {
+      console.error('[HocuspocusWebsocketProvider] Error while disconnecting', err)
     }
   }
 
@@ -492,11 +506,11 @@ export class HocuspocusProviderWebsocket extends EventEmitter {
     if (event.code === Unauthorized.code) {
       if (event.reason === Unauthorized.reason) {
         console.warn(
-          '[HocuspocusProvider] An authentication token is required, but you didn’t send one. Try adding a `token` to your HocuspocusProvider configuration. Won’t try again.',
+          '[HocuspocusWebsocketProvider] An authentication token is required, but you didn’t send one. Try adding a `token` to your HocuspocusProvider configuration. Won’t try again.',
         )
       } else {
         console.warn(
-          `[HocuspocusProvider] Connection closed with status Unauthorized: ${event.reason}`,
+          `[HocuspocusWebsocketProvider] Connection closed with status Unauthorized: ${event.reason}`,
         )
       }
 
@@ -506,7 +520,7 @@ export class HocuspocusProviderWebsocket extends EventEmitter {
     if (event.code === Forbidden.code) {
       if (!this.configuration.quiet) {
         console.warn(
-          '[HocuspocusProvider] The provided authentication token isn’t allowed to connect to this server. Will try again.',
+          '[HocuspocusWebsocketProvider] The provided authentication token isn’t allowed to connect to this server. Will try again.',
         )
         return // TODO REMOVE ME
       }
@@ -514,7 +528,7 @@ export class HocuspocusProviderWebsocket extends EventEmitter {
 
     if (event.code === MessageTooBig.code) {
       console.warn(
-        `[HocuspocusProvider] Connection closed with status MessageTooBig: ${event.reason}`,
+        `[HocuspocusWebsocketProvider] Connection closed with status MessageTooBig: ${event.reason}`,
       )
       this.shouldConnect = false
     }

@@ -7,7 +7,7 @@ export class QueryAwarenessMessageV2 extends OutgoingMessageV2 {
   description = 'Queries awareness states'
 
   get(args: Partial<OutgoingMessageArgumentsV2>) {
-    this.encoder.write('documentName', args.documentName!)
+    this.encoder.write('d', args.documentName!)
     this.encoder.write('type', this.type)
 
     return this.encoder
