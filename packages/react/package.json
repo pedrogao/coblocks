@@ -1,0 +1,47 @@
+{
+  "name": "@hocuspocus/react",
+  "version": "2.7.1",
+  "description": "hocuspocus react",
+  "homepage": "https://hocuspocus.dev",
+  "keywords": [
+    "hocuspocus",
+    "react",
+    "yjs"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/hocuspocus-react.cjs",
+  "module": "dist/hocuspocus-react.esm.js",
+  "types": "dist/packages/react/src/index.d.ts",
+  "exports": {
+    "source": {
+      "import": "./src"
+    },
+    "default": {
+      "import": "./dist/hocuspocus-react.esm.js",
+      "require": "./dist/hocuspocus-react.cjs",
+      "types": "./dist/packages/react/src/index.d.ts"
+    }
+  },
+  "files": [
+    "src",
+    "dist"
+  ],
+  "resolutions": {
+    "@types/react": "^18.2.37"
+  },
+  "dependencies": {
+    "@hocuspocus/common": "^2.7.1",
+    "@hocuspocus/provider": "^2.7.1",
+    "react": "^18.2.0",
+    "ws": "^8.14.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.37"
+  },
+  "peerDependencies": {
+    "y-protocols": "^1.0.5",
+    "yjs": "^13.6.4"
+  },
+  "gitHead": "cd788b6a315f608ef531524409abdce1e6790726"
+}
