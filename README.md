@@ -42,6 +42,14 @@ $ npm run test
 
 ## Examples
 
+### Counter、Form、Table
+
+![coblocks1](./docs/imgs/coblocks1.gif)
+
+### Rich Text、Spreadsheet
+
+![coblocks2](./docs/imgs/coblocks2.gif)
+
 ## Contributing
 
 Please see [CONTRIBUTING](docs/contributing.md) for details.
