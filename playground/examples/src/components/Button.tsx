@@ -45,7 +45,7 @@ export const EditorValue = React.forwardRef(
       ...props
     }: PropsWithChildren<
       {
-        // @typescript-eslint/no-explicit-any
+        /* eslint-disable  @typescript-eslint/no-explicit-any */
         value: any;
       } & BaseProps
     >,

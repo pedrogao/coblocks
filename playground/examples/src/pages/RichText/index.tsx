@@ -46,7 +46,7 @@ const RichTextExample = () => {
       Transforms.insertNodes(
         editor,
         {
-          // @ts-ignore
+          // @ts-expect-error type is not compatible
           type: "paragraph",
           children: [{ text: "" }],
         },
@@ -57,7 +57,9 @@ const RichTextExample = () => {
   }, [provider.document]);
 
   const [value, setValue] = useState<Descendant[]>(initialValue);
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   const renderElement = useCallback((props: any) => <Element {...props} />, []);
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   const renderLeaf = useCallback((props: any) => <Leaf {...props} />, []);
 
   useEffect(() => {
@@ -94,9 +96,10 @@ const RichTextExample = () => {
         }}
         onKeyDown={(event) => {
           for (const hotkey in HOTKEYS) {
+            /* eslint-disable  @typescript-eslint/no-explicit-any */
             if (isHotkey(hotkey, event as any)) {
               event.preventDefault();
-              // @ts-ignore
+              // @ts-expect-error type is not compatible
               const mark = HOTKEYS[hotkey];
               toggleMark(editor, mark);
             }
@@ -107,7 +110,7 @@ const RichTextExample = () => {
   );
 };
 
-// @ts-ignore
+// @ts-expect-error type is not compatible
 const toggleBlock = (editor, format) => {
   const isActive = isBlockActive(
     editor,
@@ -120,7 +123,7 @@ const toggleBlock = (editor, format) => {
     match: (n) =>
       !Editor.isEditor(n) &&
       SlateElement.isElement(n) &&
-      // @ts-ignore
+      // @ts-expect-error type is not compatible
       LIST_TYPES.includes(n.type) &&
       !TEXT_ALIGN_TYPES.includes(format),
     split: true,
@@ -128,12 +131,12 @@ const toggleBlock = (editor, format) => {
   let newProperties: Partial<SlateElement>;
   if (TEXT_ALIGN_TYPES.includes(format)) {
     newProperties = {
-      // @ts-ignore
+      // @ts-expect-error type is not compatible
       align: isActive ? undefined : format,
     };
   } else {
     newProperties = {
-      // @ts-ignore
+      // @ts-expect-error type is not compatible
       type: isActive ? "paragraph" : isList ? "list-item" : format,
     };
   }
@@ -145,7 +148,7 @@ const toggleBlock = (editor, format) => {
   }
 };
 
-// @ts-ignore
+// @ts-expect-error type is not compatible
 const toggleMark = (editor, format) => {
   const isActive = isMarkActive(editor, format);
 
@@ -156,7 +159,7 @@ const toggleMark = (editor, format) => {
   }
 };
 
-// @ts-ignore
+// @ts-expect-error type is not compatible
 const isBlockActive = (editor, format, blockType = "type") => {
   const { selection } = editor;
   if (!selection) return false;
@@ -164,7 +167,7 @@ const isBlockActive = (editor, format, blockType = "type") => {
   const [match] = Array.from(
     Editor.nodes(editor, {
       at: Editor.unhangRange(editor, selection),
-      // @ts-ignore
+      // @ts-expect-error type is not compatible
       match: (n) => !Editor.isEditor(n) && SlateElement.isElement(n) && n[blockType] === format,
     })
   );
@@ -174,11 +177,11 @@ const isBlockActive = (editor, format, blockType = "type") => {
 
 const isMarkActive = (editor: Editor, format: string) => {
   const marks = Editor.marks(editor);
-  // @ts-ignore
+  // @ts-expect-error type is not compatible
   return marks ? marks[format] === true : false;
 };
 
-// @ts-ignore
+// @ts-expect-error type is not compatible
 const Element = ({ attributes, children, element }) => {
   const style = { textAlign: element.align };
   switch (element.type) {
@@ -227,7 +230,7 @@ const Element = ({ attributes, children, element }) => {
   }
 };
 
-// @ts-ignore
+// @ts-expect-error type is not compatible
 const Leaf = ({ attributes, children, leaf }) => {
   if (leaf.bold) {
     children = <strong>{children}</strong>;
@@ -248,12 +251,13 @@ const Leaf = ({ attributes, children, leaf }) => {
   return <span {...attributes}>{children}</span>;
 };
 
-// @ts-ignore
+// @ts-expect-error type is not compatible
 const BlockButton = ({ format, icon }) => {
   const editor = useSlate();
   return (
     <Button
       active={isBlockActive(editor, format, TEXT_ALIGN_TYPES.includes(format) ? "align" : "type")}
+      /* eslint-disable  @typescript-eslint/no-explicit-any */
       onMouseDown={(event: any) => {
         event.preventDefault();
         toggleBlock(editor, format);
@@ -264,12 +268,13 @@ const BlockButton = ({ format, icon }) => {
   );
 };
 
-// @ts-ignore
+// @ts-expect-error type is not compatible
 const MarkButton = ({ format, icon }) => {
   const editor = useSlate();
   return (
     <Button
       active={isMarkActive(editor, format)}
+      /* eslint-disable  @typescript-eslint/no-explicit-any */
       onMouseDown={(event: any) => {
         event.preventDefault();
         toggleMark(editor, format);

@@ -54,7 +54,7 @@ export class MessageReceiverV2 {
         break
       }
       default:
-        throw new Error(`Can’t apply message of unknown type: ${type}`)
+        throw new Error(`Can't apply message of unknown type: ${type}`)
     }
 
     // FIXMED: `varint`'s length is `1` but not same as `JSON.stringify`'s length

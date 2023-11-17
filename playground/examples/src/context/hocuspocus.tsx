@@ -14,7 +14,7 @@ export const createHocuspocusProvider = ({
   doc?: Y.Doc;
 }) => {
   const HocuspocusProviderContext = createContext<HocuspocusProvider | null>(null);
-
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   const HocuspocusContextProvider = ({ children }: { children: any | any[] }) => {
     const newProvider = useCallback(() => {
       return new HocuspocusProvider({

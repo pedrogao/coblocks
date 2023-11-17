@@ -57,12 +57,12 @@ export const SpreadsheetExample = () => {
         }
 
         const { row, column } = coords;
-        // @typescript-eslint/no-explicit-any
+        /* eslint-disable  @typescript-eslint/no-explicit-any */
         const r = spreadsheetArray.get(row) as Y.Array<any>;
         // start transaction
         provider.document.transact(() => {
           r.delete(column);
-          // @ts-expect-error
+          // @ts-expect-error nextCell always has a value
           r.insert(column, [{ value: nextCell?.value || "" }]);
         });
       }}
