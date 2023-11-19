@@ -4,6 +4,22 @@ package project;
 
 service ProjectService {
   rpc FindProjectList (ProjectByCreatorIdRequest) returns (ProjectListResponse) {}
+  rpc CreateProject (CreateProjectRequest) returns (Project) {}
+  rpc UpdateProject (UpdateProjectRequest) returns (Project) {}
+}
+
+message UpdateProjectRequest {
+  int64 id = 1;
+  optional string name = 2;
+  optional string environment = 3;
+  optional string description = 4;
+}
+
+message CreateProjectRequest {
+  string name = 1;
+  string environment = 2;
+  optional string description = 3;
+  int64 creator_id = 4;
 }
 
 message ProjectByCreatorIdRequest {

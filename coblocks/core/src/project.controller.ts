@@ -1,0 +1,84 @@
+import { Controller } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
+import { Observable } from 'rxjs';
+import { Metadata } from '@grpc/grpc-js';
+import {
+  ProjectServiceControllerMethods,
+  ProjectServiceController,
+  PROJECT_SERVICE_NAME,
+  ProjectByCreatorIdRequest,
+  ProjectListResponse,
+  CreateProjectRequest,
+  Project,
+  UpdateProjectRequest,
+} from '../../proto/project';
+import { ProjectService } from './dao/project.service';
+
+@Controller()
+@ProjectServiceControllerMethods()
+export class ProjectController implements ProjectServiceController {
+  constructor(private projectService: ProjectService) {}
+
+  @GrpcMethod(PROJECT_SERVICE_NAME, 'findProjectList')
+  findProjectList(
+    request: ProjectByCreatorIdRequest,
+    metadata?: Metadata,
+  ): Promise<ProjectListResponse> | Observable<ProjectListResponse> | ProjectListResponse {
+    return this.projectService.findProject(request.creatorId).then((projects) => {
+      return {
+        projects: projects.map((project) => {
+          return {
+            id: Number(project.id),
+            name: project.name,
+            environment: project.environment,
+            description: project.description,
+          };
+        }),
+      };
+    });
+  }
+
+  @GrpcMethod(PROJECT_SERVICE_NAME, 'createProject')
+  createProject(
+    request: CreateProjectRequest,
+    metadata?: Metadata,
+  ): Promise<Project> | Observable<Project> | Project {
+    return this.projectService
+      .createProject({
+        name: request.name,
+        environment: request.environment,
+        description: request.description,
+        creatorId: request.creatorId,
+      })
+      .then((project) => {
+        return {
+          id: Number(project.id),
+          name: project.name,
+          environment: project.environment,
+          description: project.description,
+        };
+      });
+  }
+
+  @GrpcMethod(PROJECT_SERVICE_NAME, 'updateProject')
+  updateProject(
+    request: UpdateProjectRequest,
+    metadata?: Metadata,
+  ): Promise<Project> | Observable<Project> | Project {
+    return this.projectService
+      .updateProject({
+        id: request.id,
+        name: request.name,
+        environment: request.environment,
+        description: request.description,
+      })
+      .then((project) => {
+        return {
+          id: Number(project.id),
+          name: project.name,
+          environment: project.environment,
+          description: project.description,
+        };
+      });
+  }
+}
