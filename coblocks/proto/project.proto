@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package project;
+
+service ProjectService {
+  rpc FindProjectList (ProjectByCreatorIdRequest) returns (ProjectListResponse) {}
+}
+
+message ProjectByCreatorIdRequest {
+  int64 creator_id = 1;
+}
+
+message ProjectListResponse {
+  repeated Project projects = 1;
+}
+
+message Project {
+  int64 id = 1;
+  string name = 2;
+  string environment = 3;
+  string description = 4;
+}

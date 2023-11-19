@@ -277,7 +277,7 @@ export class Redis implements Extension {
   */
   private handleIncomingMessage = async (channel: Buffer, data: Buffer) => {
     const [identifier, messageBuffer] = this.decodeMessage(data)
-
+    // Avoid handling messages from ourselves.
     if (identifier === this.configuration.identifier) {
       return
     }

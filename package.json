@@ -3,6 +3,7 @@
   "workspaces": [
     "playground/*",
     "packages/*",
+    "coblocks",
     "tests"
   ],
   "browserslist": [

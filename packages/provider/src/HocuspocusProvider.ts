@@ -216,6 +216,8 @@ export class HocuspocusProvider extends EventEmitter {
     this.awareness?.on('update', this.awarenessUpdateHandler.bind(this))
     this.registerEventListeners()
 
+    // Cliet force sync to server by interval
+    // Send sync `step1` message
     if (this.configuration.forceSyncInterval) {
       this.intervals.forceSync = setInterval(
         this.forceSync.bind(this),
@@ -395,6 +397,7 @@ export class HocuspocusProvider extends EventEmitter {
       return
     }
 
+    // Send authentication message if token is available
     if (this.isAuthenticationRequired) {
       this.send(AuthenticationMessageV2, {
         token,
@@ -402,6 +405,7 @@ export class HocuspocusProvider extends EventEmitter {
       })
     }
 
+    // Start `step1` by client
     this.startSync()
   }
 
@@ -530,11 +534,8 @@ export class HocuspocusProvider extends EventEmitter {
     this.mux(() => {
       const message = new IncomingMessageV2(data)
 
-      // const documentName = message.readVarString()
       const documentName = message.read('d')
-
       message.write('d', documentName)
-      // message.writeVarString(documentName)
 
       new MessageReceiverV2(message)
         .setBroadcasted(true)
