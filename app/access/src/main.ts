@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
-import '../../common/polyfill';
+import { polyfill } from '@coblocks/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -9,4 +9,6 @@ async function bootstrap() {
   const port = configService.get('http.port');
   await app.listen(port);
 }
+
+polyfill();
 bootstrap();

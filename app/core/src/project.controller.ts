@@ -11,7 +11,7 @@ import {
   CreateProjectRequest,
   Project,
   UpdateProjectRequest,
-} from '../../proto/project';
+} from '@coblocks/proto';
 import { ProjectService } from './dao/project.service';
 
 @Controller()
