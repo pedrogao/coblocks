@@ -5,10 +5,29 @@
   "author": "pedrogao",
   "private": true,
   "license": "MIT",
+  "type": "module",
+  "main": "dist/coblocks-proto.cjs",
+  "module": "dist/coblocks-proto.esm.js",
+  "types": "dist/app/proto/src/index.d.ts",
+  "exports": {
+    "source": {
+      "import": "./src"
+    },
+    "default": {
+      "import": "./dist/coblocks-proto.esm.js",
+      "require": "./dist/coblocks-proto.cjs",
+      "types": "./dist/app/proto/src/index.d.ts"
+    }
+  },
+  "files": [
+    "src",
+    "dist"
+  ],
   "scripts": {
     "start": "npm run clean && npm run protoc",
-    "clean": "rm ./*.ts",
-    "protoc": "protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./ --ts_proto_opt=nestJs=true --ts_proto_opt=addGrpcMetadata=true --ts_proto_opt=outputServices=grpc-js --proto_path=./ project.proto"
+    "clean": "find ./src -type f ! -name 'index.ts' -exec rm -f {} +",
+    "protoc": "sh ./build.sh",
+    "link": "sh ./link.sh"
   },
   "dependencies": {
     "@nestjs/microservices": "^10.2.9",

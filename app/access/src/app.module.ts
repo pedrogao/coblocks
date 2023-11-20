@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule } from '@nestjs/config';
+import { PROJECT_PACKAGE_NAME, protobufPackage } from '@coblocks/proto';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import configuration from './config/configuration';
-import { HERO_PACKAGE_NAME } from '../../proto/hero';
 
 @Module({
   imports: [
@@ -15,11 +15,11 @@ import { HERO_PACKAGE_NAME } from '../../proto/hero';
 
     ClientsModule.register([
       {
-        name: HERO_PACKAGE_NAME,
+        name: PROJECT_PACKAGE_NAME,
         transport: Transport.GRPC,
         options: {
-          package: 'hero',
-          protoPath: join('../', 'proto/hero.proto'),
+          package: [protobufPackage],
+          protoPath: [join(__dirname, 'pb/project.proto')],
         },
       },
     ]),

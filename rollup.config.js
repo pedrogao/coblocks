@@ -24,6 +24,7 @@ async function getBuildPackages(packagesDir) {
         .map(dirent => {
           return {
             path: `${packagesDir}/${dirent.name}`,
+            name: dirent.name,
           }
         })
 
@@ -35,6 +36,10 @@ async function getBuildPackages(packagesDir) {
 async function build(commandLineArgs) {
   const config = []
   const packages = await getBuildPackages('./packages')
+  const common = (await getBuildPackages('./app')).filter(
+    pkg => pkg.name === 'common' || pkg.name === 'proto',
+  )
+  packages.push(...common)
 
   packages.forEach(pkg => {
     const basePath = pkg.path
@@ -92,7 +97,7 @@ async function build(commandLineArgs) {
               },
             },
             include: [],
-            exclude: ['tests', 'playground', 'app'],
+            exclude: ['tests', 'playground', 'test'],
           },
         }),
       ],

@@ -1,8 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "core/src",
+  "sourceRoot": "src",
   "compilerOptions": {
+    "assets": ["pb/*.proto"],
+    "watchAssets": true,
     "deleteOutDir": true
   }
 }

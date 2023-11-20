@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { Role } from '../../common/enums';
-import { hashPassword } from '../../common/password';
+import { Role, hashPassword } from '@coblocks/common';
 
 const prisma = new PrismaClient();
 

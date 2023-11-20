@@ -29,7 +29,9 @@
     "@nestjs/platform-express": "^10.0.0",
     "js-yaml": "^4.1.0",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "@coblocks/proto": "workspace:*",
+    "@coblocks/common": "workspace:*"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

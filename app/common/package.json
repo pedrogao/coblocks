@@ -5,10 +5,29 @@
   "author": "pedrogao",
   "private": true,
   "license": "MIT",
+  "type": "module",
+  "main": "dist/coblocks-common.cjs",
+  "module": "dist/coblocks-common.esm.js",
+  "types": "dist/app/common/src/index.d.ts",
+  "exports": {
+    "source": {
+      "import": "./src"
+    },
+    "default": {
+      "import": "./dist/coblocks-common.esm.js",
+      "require": "./dist/coblocks-common.cjs",
+      "types": "./dist/app/common/src/index.d.ts"
+    }
+  },
+  "files": [
+    "src",
+    "dist"
+  ],
   "scripts": {
     "test": "jest"
   },
   "dependencies": {
+    "@jest/globals": "^29.7.0",
     "argon2": "^0.31.2"
   },
   "devDependencies": {
