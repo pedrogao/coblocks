@@ -4,14 +4,13 @@ import {
   Project,
   ProjectServiceClient,
   PROJECT_SERVICE_NAME,
-  PROJECT_PACKAGE_NAME,
 } from '@coblocks/proto';
 
 @Injectable()
 export class AppService implements OnModuleInit {
   private projectService: ProjectServiceClient;
 
-  constructor(@Inject(PROJECT_PACKAGE_NAME) private client: ClientGrpc) {}
+  constructor(@Inject('project') private client: ClientGrpc) {}
 
   onModuleInit() {
     this.projectService = this.client.getService<ProjectServiceClient>(PROJECT_SERVICE_NAME);

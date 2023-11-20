@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package room;
+
+service RoomService {
+  rpc FindRoomList (FindRoomListRequest) returns (FindRoomListResponse) {}
+  rpc CreateRoom (CreateRoomRequest) returns (Room) {}
+  rpc UpdateRoom (UpdateRoomRequest) returns (Room) {}
+}
+
+message UpdateRoomRequest {
+  int64 id = 1;
+  int32 status = 2;
+}
+
+message CreateRoomRequest {
+  string name = 1;
+  int64 project_id = 2;
+  int32 status = 3;
+  int64 creator_id = 4;
+}
+
+message FindRoomListRequest {
+  string creator_id = 1;
+}
+
+message FindRoomListResponse {
+  repeated Room rooms = 1;
+}
+
+message Room {
+  int64 id = 1;
+  string name = 2;
+  int64 project_id = 3;
+  int32 status = 4;
+  int64 creator_id = 5;
+}
