@@ -3,7 +3,7 @@
   "workspaces": [
     "playground/*",
     "packages/*",
-    "coblocks",
+    "app/*",
     "tests"
   ],
   "browserslist": [
@@ -60,6 +60,7 @@
     "ncu": "ncu -i --deep && npm install"
   },
   "devDependencies": {
+    "@types/node": "^20.9.2",
     "@atomico/rollup-plugin-sizes": "^1.1.4",
     "@ava/typescript": "^3.0.1",
     "@babel/core": "7.18.6",
@@ -93,5 +94,5 @@
     "typescript": "^5.0.4",
     "uuid": "^8.3.2"
   },
-  "name": "hocuspocus"
+  "name": "coblocks"
 }

@@ -29,7 +29,7 @@
     "dist"
   ],
   "dependencies": {
-    "@hocuspocus/common": "^2.7.1",
+    "@hocuspocus/common": "workspace:^2.7.1",
     "@lifeomic/attempt": "^3.0.2",
     "lib0": "^0.2.47",
     "ws": "^8.14.2"
@@ -38,5 +38,8 @@
     "y-protocols": "^1.0.5",
     "yjs": "^13.6.4"
   },
-  "gitHead": "cd788b6a315f608ef531524409abdce1e6790726"
+  "gitHead": "cd788b6a315f608ef531524409abdce1e6790726",
+  "devDependencies": {
+    "@types/ws": "^8.5.3"
+  }
 }

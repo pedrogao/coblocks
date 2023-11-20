@@ -22,7 +22,7 @@ export class ProjectController implements ProjectServiceController {
   @GrpcMethod(PROJECT_SERVICE_NAME, 'findProjectList')
   findProjectList(
     request: ProjectByCreatorIdRequest,
-    metadata?: Metadata,
+    _metadata?: Metadata,
   ): Promise<ProjectListResponse> | Observable<ProjectListResponse> | ProjectListResponse {
     return this.projectService.findProject(request.creatorId).then((projects) => {
       return {
@@ -41,7 +41,7 @@ export class ProjectController implements ProjectServiceController {
   @GrpcMethod(PROJECT_SERVICE_NAME, 'createProject')
   createProject(
     request: CreateProjectRequest,
-    metadata?: Metadata,
+    _metadata?: Metadata,
   ): Promise<Project> | Observable<Project> | Project {
     return this.projectService
       .createProject({
@@ -63,7 +63,7 @@ export class ProjectController implements ProjectServiceController {
   @GrpcMethod(PROJECT_SERVICE_NAME, 'updateProject')
   updateProject(
     request: UpdateProjectRequest,
-    metadata?: Metadata,
+    _metadata?: Metadata,
   ): Promise<Project> | Observable<Project> | Project {
     return this.projectService
       .updateProject({

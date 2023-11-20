@@ -30,10 +30,11 @@
   "devDependencies": {
     "@types/ioredis": "^4.28.7",
     "@types/lodash.debounce": "^4.0.6",
-    "@types/redlock": "^4.0.3"
+    "@types/redlock": "^4.0.3",
+    "@types/uuid": "^9.0.0"
   },
   "dependencies": {
-    "@hocuspocus/server": "^2.7.1",
+    "@hocuspocus/server": "workspace:^2.7.1",
     "ioredis": "^4.28.2",
     "kleur": "^4.1.4",
     "lodash.debounce": "^4.0.8",

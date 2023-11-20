@@ -39,7 +39,8 @@ export class Throttle implements Extension {
 
   onDestroy() {
     if (this.cleanupInterval) {
-      clearInterval(this.cleanupInterval)
+      // @ts-ignore
+      clearInterval(this.cleanupInterval!)
     }
 
     return Promise.resolve()
