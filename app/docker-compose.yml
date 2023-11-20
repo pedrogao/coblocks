@@ -21,8 +21,10 @@ services:
   #     context: ./core
   #     dockerfile: Dockerfile
   #   ports:
-  #     - "3000:3000"
+  #     - "5000:5000"
   #   depends_on:
   #     - mysql
-  #   volumes:
-  #     - ./:/usr/src/app
+  #   environment:
+  #     DATABASE_URL: mysql://root:123456@mysql:3306/coblocks
+  #     NODE_ENV: development
+  #     PORT: 3000

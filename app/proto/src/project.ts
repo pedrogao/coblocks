@@ -3,8 +3,6 @@ import { Metadata } from "@grpc/grpc-js";
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
 
-export const protobufPackage = "project";
-
 export interface UpdateProjectRequest {
   id: number;
   name?: string | undefined;
@@ -33,8 +31,6 @@ export interface Project {
   environment: string;
   description: string;
 }
-
-export const PROJECT_PACKAGE_NAME = "project";
 
 export interface ProjectServiceClient {
   findProjectList(request: ProjectByCreatorIdRequest, metadata?: Metadata): Observable<ProjectListResponse>;
