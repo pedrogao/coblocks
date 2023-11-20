@@ -24,7 +24,9 @@ export class ProjectController implements ProjectServiceController {
     request: ProjectByCreatorIdRequest,
     _metadata?: Metadata,
   ): Promise<ProjectListResponse> | Observable<ProjectListResponse> | ProjectListResponse {
-    return this.projectService.findProject(request.creatorId).then((projects) => {
+    const creatorId =
+      typeof request.creatorId === 'number' ? request.creatorId : Number(request.creatorId);
+    return this.projectService.findProject(creatorId).then((projects) => {
       return {
         projects: projects.map((project) => {
           return {

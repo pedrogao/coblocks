@@ -36,11 +36,6 @@ async function getBuildPackages(packagesDir) {
 async function build(commandLineArgs) {
   const config = []
   const packages = await getBuildPackages('./packages')
-  const common = (await getBuildPackages('./app')).filter(
-    pkg => pkg.name === 'common' || pkg.name === 'proto',
-  )
-  packages.push(...common)
-
   packages.forEach(pkg => {
     const basePath = pkg.path
     const input = path.join(basePath, 'src/index.ts')
