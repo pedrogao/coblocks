@@ -1,6 +1,5 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
-import { Observable } from 'rxjs';
 import {
   Project,
   ProjectServiceClient,
@@ -18,8 +17,10 @@ export class AppService implements OnModuleInit {
     this.projectService = this.client.getService<ProjectServiceClient>(PROJECT_SERVICE_NAME);
   }
 
-  getProject(): Observable<Project> {
-    // return this.projectService.findProjectList({ creatorId: 1 }).pipe((res) => res.);
-    return null;
+  async getProjectList(creatorId: number): Promise<Project[]> {
+    return this.projectService
+      .findProjectList({ creatorId })
+      .toPromise()
+      .then((res) => res.projects);
   }
 }
