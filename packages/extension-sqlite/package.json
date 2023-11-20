@@ -27,7 +27,7 @@
     "dist"
   ],
   "dependencies": {
-    "@hocuspocus/extension-database": "^2.7.1",
+    "@hocuspocus/extension-database": "workspace:^2.7.1",
     "kleur": "^4.1.4",
     "sqlite3": "^5.0.11"
   },

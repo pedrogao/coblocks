@@ -1,6 +1,7 @@
 import { Doc, applyUpdate, encodeStateAsUpdate } from 'yjs'
 // @ts-ignore
 import { yDocToProsemirrorJSON, prosemirrorJSONToYDoc } from 'y-prosemirror'
+// @ts-ignore
 import { Schema } from '@tiptap/pm/model'
 import { Transformer } from './types.js'
 

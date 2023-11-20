@@ -28,7 +28,7 @@
     "dist"
   ],
   "dependencies": {
-    "@hocuspocus/server": "^2.7.1"
+    "@hocuspocus/server": "workspace:^2.7.1"
   },
   "gitHead": "b3454a4ca289a84ddfb7fa5607a2d4b8d5c37e9d"
 }
