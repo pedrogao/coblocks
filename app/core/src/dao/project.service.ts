@@ -2,16 +2,33 @@ import { Injectable } from '@nestjs/common';
 import { Project } from '@prisma/client';
 import { PrismaService } from './prisma.service';
 
+interface FindProjectListParams {
+  creatorId: number;
+  limit: number;
+  offset: number;
+}
+
 @Injectable()
 export class ProjectService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findProject(creatorId: number): Promise<Project[]> {
-    return this.prismaService.project.findMany({
-      where: {
-        creator_id: creatorId,
-      },
-    });
+  async findProjectList({ creatorId, limit, offset }: FindProjectListParams) {
+    const prisma = this.prismaService;
+
+    const [projects, total] = await prisma.$transaction([
+      prisma.project.findMany({
+        where: {
+          creator_id: creatorId,
+        },
+        take: limit,
+        skip: offset,
+      }),
+      prisma.project.count(),
+    ]);
+    return {
+      projects,
+      total,
+    };
   }
 
   async createProject({

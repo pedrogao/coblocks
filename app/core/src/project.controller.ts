@@ -1,6 +1,5 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { Observable } from 'rxjs';
 import { Metadata } from '@grpc/grpc-js';
 import {
   ProjectServiceControllerMethods,
@@ -20,31 +19,38 @@ export class ProjectController implements ProjectServiceController {
   constructor(private projectService: ProjectService) {}
 
   @GrpcMethod(PROJECT_SERVICE_NAME, 'findProjectList')
-  findProjectList(
+  async findProjectList(
     request: ProjectByCreatorIdRequest,
     _metadata?: Metadata,
-  ): Promise<ProjectListResponse> | Observable<ProjectListResponse> | ProjectListResponse {
+  ): Promise<ProjectListResponse> {
     const creatorId =
       typeof request.creatorId === 'number' ? request.creatorId : Number(request.creatorId);
-    return this.projectService.findProject(creatorId).then((projects) => {
-      return {
-        projects: projects.map((project) => {
+
+    const { projects, total } = await this.projectService.findProjectList({
+      creatorId,
+      limit: request.limit,
+      offset: request.offset,
+    });
+
+    return {
+      count: request.limit,
+      page: Math.ceil(request.offset / request.limit) + 1,
+      total,
+      pageCount: Math.ceil(total / request.limit),
+      data:
+        projects.map((project) => {
           return {
             id: Number(project.id),
             name: project.name,
             environment: project.environment,
             description: project.description,
           };
-        }),
-      };
-    });
+        }) || [],
+    };
   }
 
   @GrpcMethod(PROJECT_SERVICE_NAME, 'createProject')
-  createProject(
-    request: CreateProjectRequest,
-    _metadata?: Metadata,
-  ): Promise<Project> | Observable<Project> | Project {
+  async createProject(request: CreateProjectRequest, _metadata?: Metadata): Promise<Project> {
     return this.projectService
       .createProject({
         name: request.name,
@@ -63,10 +69,7 @@ export class ProjectController implements ProjectServiceController {
   }
 
   @GrpcMethod(PROJECT_SERVICE_NAME, 'updateProject')
-  updateProject(
-    request: UpdateProjectRequest,
-    _metadata?: Metadata,
-  ): Promise<Project> | Observable<Project> | Project {
+  async updateProject(request: UpdateProjectRequest, _metadata?: Metadata): Promise<Project> {
     return this.projectService
       .updateProject({
         id: request.id,

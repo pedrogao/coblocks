@@ -24,10 +24,16 @@ message CreateProjectRequest {
 
 message ProjectByCreatorIdRequest {
   int64 creator_id = 1;
+  int32 limit = 2;
+  int32 offset = 3;
 }
 
 message ProjectListResponse {
-  repeated Project projects = 1;
+  int32 count = 1;
+  int32 page = 2;
+  int32 total = 3;
+  int32 page_count = 4;
+  repeated Project data = 5;
 }
 
 message Project {

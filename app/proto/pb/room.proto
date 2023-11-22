@@ -21,11 +21,17 @@ message CreateRoomRequest {
 }
 
 message FindRoomListRequest {
-  string creator_id = 1;
+  int64 project_id = 1;
+  int32 limit = 2;
+  int32 offset = 3;
 }
 
 message FindRoomListResponse {
-  repeated Room rooms = 1;
+  int32 count = 1;
+  int32 page = 2;
+  int32 total = 3;
+  int32 page_count = 4;
+  repeated Room data = 5;
 }
 
 message Room {
