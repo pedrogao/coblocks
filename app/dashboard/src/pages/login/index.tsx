@@ -11,14 +11,19 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useLogin } from "@refinedev/core";
+import { useTranslate, useLogin } from "@refinedev/core";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
+  const translate = useTranslate();
+
   const { mutate: login } = useLogin();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
+
+  const navigate = useNavigate();
 
   return (
     <Flex
@@ -30,53 +35,55 @@ export const Login = () => {
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"}>Coblocks</Heading>
-          <Heading fontSize={"xl"}>Sign in to your account</Heading>
+          <Heading fontSize={"xl"}>{translate("pages.login.title")}</Heading>
         </Stack>
-        <Box
-          rounded={"lg"}
-          bg={useColorModeValue("white", "gray.700")}
-          boxShadow={"lg"}
-          p={8}
-        >
+        <Box rounded={"lg"} bg={useColorModeValue("white", "gray.700")} boxShadow={"lg"} p={8}>
           <Stack spacing={4}>
             <FormControl id="name">
-              <FormLabel>Name</FormLabel>
-              <Input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
+              <FormLabel>{translate("pages.login.fields.name")}</FormLabel>
+              <Input type="text" value={name} onChange={(e) => setName(e.target.value)} />
             </FormControl>
             <FormControl id="password">
-              <FormLabel>Password</FormLabel>
+              <FormLabel>{translate("pages.login.fields.password")}</FormLabel>
               <Input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </FormControl>
-            <Stack spacing={10}>
+            <Stack spacing={6}>
               <Stack
                 direction={{ base: "column", sm: "row" }}
                 align={"start"}
                 justify={"space-between"}
               >
                 <Checkbox
+                  fontSize="sm"
                   isChecked={remember}
                   onChange={(e) => {
                     // @ts-ignore
                     setRemember(e.target.checked);
                   }}
                 >
-                  Remember me
+                  {translate("pages.login.buttons.rememberMe")}
                 </Checkbox>
-                <Text color={"blue.400"}>Forgot password?</Text>
+                <Text
+                  color={"blue.400"}
+                  _hover={{
+                    color: "blue.700",
+                  }}
+                  onClick={() => {
+                    navigate("/forgot-password");
+                  }}
+                >
+                  {translate("pages.login.buttons.forgotPassword")}
+                </Text>
               </Stack>
               <Button
                 bg={"blue.400"}
                 color={"white"}
                 _hover={{
-                  bg: "blue.500",
+                  bg: "blue.700",
                 }}
                 onClick={(e) => {
                   e.preventDefault();
@@ -94,8 +101,21 @@ export const Login = () => {
                   setRemember(false);
                 }}
               >
-                Sign in
+                {translate("pages.login.signin")}
               </Button>
+              <Stack>
+                <Text
+                  color={"blue.500"}
+                  _hover={{
+                    color: "blue.600",
+                  }}
+                  onClick={() => {
+                    navigate("/register");
+                  }}
+                >
+                  {translate("pages.login.buttons.noAccount")}
+                </Text>
+              </Stack>
             </Stack>
           </Stack>
         </Box>

@@ -7,14 +7,15 @@
       "divider": "or",
       "fields": {
         "email": "邮箱",
-        "password": "密码"
+        "password": "密码",
+        "name": "姓名"
       },
       "errors": {
         "validEmail": "非法邮箱地址"
       },
       "buttons": {
         "submit": "登录",
-        "forgotPassword": "忘记了密码?",
+        "forgotPassword": "忘记密码?",
         "noAccount": "还没有账户?",
         "rememberMe": "记住我"
       }
@@ -28,21 +29,21 @@
         "validEmail": "非法邮箱地址"
       },
       "buttons": {
-        "submit": "发送重置邮件"
+        "submit": "发送重置密码邮件"
       }
     },
     "register": {
       "title": "注册账户",
       "fields": {
-        "email": "邮箱",
+        "name": "姓名",
         "password": "密码"
       },
       "errors": {
-        "validEmail": "I非法邮箱地址"
+        "validEmail": "非法邮箱地址"
       },
       "buttons": {
         "submit": "注册",
-        "haveAccount": "有账户?"
+        "haveAccount": "已有账户?"
       }
     },
     "updatePassword": {
@@ -62,31 +63,31 @@
       "info": "You may have forgotten to add the {{action}} component to {{resource}} resource.",
       "404": "Sorry, the page you visited does not exist.",
       "resource404": "Are you sure you have created the {{resource}} resource.",
-      "backHome": "Back Home"
+      "backHome": "回到主页"
     }
   },
   "actions": {
-    "list": "List",
-    "create": "Create",
-    "edit": "Edit",
-    "show": "Show"
+    "list": "列表",
+    "create": "新建",
+    "edit": "编辑",
+    "show": "详情"
   },
   "buttons": {
-    "create": "Create",
-    "save": "Save",
-    "logout": "Logout",
-    "delete": "Delete",
-    "edit": "Edit",
-    "cancel": "Cancel",
-    "confirm": "Are you sure?",
-    "filter": "Filter",
-    "clear": "Clear",
-    "refresh": "Refresh",
-    "show": "Show",
-    "undo": "Undo",
-    "import": "Import",
-    "clone": "Clone",
-    "notAccessTitle": "You don't have permission to access"
+    "create": "新建",
+    "save": "保存",
+    "logout": "退出登录",
+    "delete": "删除",
+    "edit": "编辑",
+    "cancel": "取消",
+    "confirm": "确认?",
+    "filter": "过滤",
+    "clear": "清除",
+    "refresh": "刷新",
+    "show": "详情",
+    "undo": "撤销",
+    "import": "导入",
+    "clone": "删除",
+    "notAccessTitle": "无权访问"
   },
   "warnWhenUnsavedChanges": "Are you sure you want to leave? You have unsaved changes.",
   "notifications": {
@@ -103,63 +104,38 @@
   },
   "loading": "Loading",
   "tags": {
-    "clone": "Clone"
+    "clone": "克隆"
   },
   "dashboard": {
     "title": "Dashboard"
   },
-  "blog_posts": {
-    "blog_posts": "Blog Posts",
+  "projects": {
+    "projects": "项目",
     "fields": {
       "id": "Id",
-      "title": "Title",
-      "content": "Content",
-      "status": "Status",
-      "createdAt": "Created At",
-      "updatedAt": "Updated At",
-      "category": "Category"
+      "name": "名称",
+      "environment": "环境",
+      "description": "描述"
     },
     "titles": {
-      "create": "Create Blog Post",
-      "edit": "Edit Blog Post",
-      "list": "Blog Posts",
-      "show": "Show Blog Post"
-    }
-  },
-  "categories": {
-    "categories": "Categories",
-    "fields": {
-      "id": "Id",
-      "title": "Title",
-      "updatedAt": "Updated At",
-      "createdAt": "Created At"
-    },
-    "titles": {
-      "create": "Create Category",
-      "edit": "Edit Category",
-      "list": "Categories",
-      "show": "Show Category"
+      "create": "新建项目",
+      "edit": "编辑项目",
+      "list": "项目列表",
+      "show": "项目详情"
     }
   },
   "documentTitle": {
-    "default": "refine",
-    "suffix": " | refine",
-    "blog_posts": {
-      "list": "Blog Posts | refine",
-      "show": "#{{id}} Show Blog Post | refine",
-      "edit": "#{{id}} Edit Blog Post | refine",
-      "create": "Create new Blog Post | refine",
-      "clone": "#{{id}} Clone Blog Post | refine"
-    },
-    "categories": {
-      "list": "Categories | refine",
-      "show": "#{{id}} Show Category | refine",
-      "edit": "#{{id}} Edit Category | refine",
-      "create": "Create new Category | refine",
-      "clone": "#{{id}} Clone Category | refine"
+    "default": "coblcoks",
+    "suffix": " | coblcoks",
+    "projects": {
+      "list": "项目 | coblcoks",
+      "show": "#{{id}} 项目详情 | coblcoks",
+      "edit": "#{{id}} 编辑项目 | coblcoks",
+      "create": "新建项目 | coblcoks",
+      "clone": "#{{id}} 克隆项目 | coblcoks"
     }
   },
   "table": {
-    "actions": "Actions"
+    "actions": "操作"
   }
 }
