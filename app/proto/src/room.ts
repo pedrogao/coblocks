@@ -16,11 +16,17 @@ export interface CreateRoomRequest {
 }
 
 export interface FindRoomListRequest {
-  creatorId: string;
+  projectId: number;
+  limit: number;
+  offset: number;
 }
 
 export interface FindRoomListResponse {
-  rooms: Room[];
+  count: number;
+  page: number;
+  total: number;
+  pageCount: number;
+  data: Room[];
 }
 
 export interface Room {

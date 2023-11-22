@@ -19,10 +19,16 @@ export interface CreateProjectRequest {
 
 export interface ProjectByCreatorIdRequest {
   creatorId: number;
+  limit: number;
+  offset: number;
 }
 
 export interface ProjectListResponse {
-  projects: Project[];
+  count: number;
+  page: number;
+  total: number;
+  pageCount: number;
+  data: Project[];
 }
 
 export interface Project {
