@@ -60,7 +60,7 @@ export const ProjectList: React.FC<IResourceComponentsProps> = () => {
       {
         id: "actions",
         accessorKey: "id",
-        header: "Actions",
+        header: translate("table.actions"),
         cell: function render({ getValue }) {
           return (
             <HStack>
