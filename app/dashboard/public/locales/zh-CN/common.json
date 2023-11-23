@@ -11,7 +11,9 @@
         "name": "姓名"
       },
       "errors": {
-        "validEmail": "非法邮箱地址"
+        "validEmail": "非法邮箱地址",
+        "loginFailed": "登录失败",
+        "loginFailedMsg": "请检查姓名和密码是否正确"
       },
       "buttons": {
         "submit": "登录",
@@ -39,7 +41,9 @@
         "password": "密码"
       },
       "errors": {
-        "validEmail": "非法邮箱地址"
+        "validEmail": "非法邮箱地址",
+        "registerFailed": "注册失败",
+        "registerFailedMsg": "请检查姓名和密码是否正确"
       },
       "buttons": {
         "submit": "注册",

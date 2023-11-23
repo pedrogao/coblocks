@@ -3,6 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { ProjectModule } from './project/project.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -11,6 +13,8 @@ import configuration from './config/configuration';
       load: [configuration],
     }),
     ProjectModule,
+    AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [],

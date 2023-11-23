@@ -13,10 +13,7 @@ import {
   useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
-import {
-  HamburgerMenu,
-  RefineThemedLayoutV2HeaderProps,
-} from "@refinedev/chakra-ui";
+import { HamburgerMenu, RefineThemedLayoutV2HeaderProps } from "@refinedev/chakra-ui";
 import { useGetIdentity, useGetLocale, useSetLocale } from "@refinedev/core";
 import { IconLanguage, IconMoon, IconSun } from "@tabler/icons-react";
 import i18n from "i18next";
@@ -24,21 +21,16 @@ import React from "react";
 
 type IUser = {
   id: number;
-  name: string;
-  avatar: string;
+  username: string;
+  role: number;
 };
 
-export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
-  sticky,
-}) => {
+export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) => {
   const { data: user } = useGetIdentity<IUser>();
 
   const { colorMode, toggleColorMode } = useColorMode();
 
-  const bgColor = useColorModeValue(
-    "refine.header.bg.light",
-    "refine.header.bg.dark"
-  );
+  const bgColor = useColorModeValue("refine.header.bg.light", "refine.header.bg.dark");
 
   const changeLanguage = useSetLocale();
   const locale = useGetLocale();
@@ -57,8 +49,6 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
     switch (lang) {
       case "en":
         return "English";
-      case "de":
-        return "German";
       case "zh-CN":
         return "中文简体";
       default:
@@ -100,9 +90,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
                 }}
                 value={lang}
                 color={lang === currentLocale ? "green" : undefined}
-                icon={
-                  <Avatar src={`/images/flags/${lang}.svg`} h={18} w={18} />
-                }
+                icon={<Avatar src={`/images/flags/${lang}.svg`} h={18} w={18} />}
               >
                 {getLanguageTitle(lang)}
               </MenuItem>
@@ -110,26 +98,18 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
           </MenuList>
         </Menu>
 
-        <IconButton
-          variant="ghost"
-          aria-label="Toggle theme"
-          onClick={toggleColorMode}
-        >
-          <Icon
-            as={colorMode === "light" ? IconMoon : IconSun}
-            w="24px"
-            h="24px"
-          />
+        <IconButton variant="ghost" aria-label="Toggle theme" onClick={toggleColorMode}>
+          <Icon as={colorMode === "light" ? IconMoon : IconSun} w="24px" h="24px" />
         </IconButton>
 
-        {(user?.avatar || user?.name) && (
+        {user?.username && (
           <HStack>
-            {user?.name && (
+            {user?.username && (
               <Text size="sm" fontWeight="bold">
-                {user.name}
+                {user.username}
               </Text>
             )}
-            <Avatar size="sm" name={user?.name} src={user?.avatar} />
+            <Avatar size="sm" name={user?.username} />
           </HStack>
         )}
       </HStack>

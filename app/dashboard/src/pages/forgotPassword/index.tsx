@@ -11,10 +11,6 @@ import {
 import { useTranslate } from "@refinedev/core";
 import { useNavigate } from "react-router-dom";
 
-type ForgotPasswordFormInputs = {
-  email: string;
-};
-
 export const ForgotPassword = () => {
   const translate = useTranslate();
   const navigate = useNavigate();
@@ -39,7 +35,7 @@ export const ForgotPassword = () => {
         <Heading lineHeight={1.1} fontSize={{ base: "xl", md: "xl" }}>
           {translate("pages.forgotPassword.title")}
         </Heading>
-        <FormControl id="email">
+        <FormControl id="email" isRequired isDisabled>
           <Input
             placeholder={translate("pages.forgotPassword.fields.email")}
             _placeholder={{ color: "gray.500" }}

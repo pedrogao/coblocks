@@ -15,18 +15,32 @@ export class ProjectService implements OnModuleInit {
     this.projectService = this.client.getService<ProjectServiceClient>(PROJECT_SERVICE_NAME);
   }
 
-  async create(createProjectDto: CreateProjectDto) {
-    return 'This action adds a new project';
+  async create(createProjectDto: CreateProjectDto, creatorId: number) {
+    const { name, description, environment } = createProjectDto;
+    const resp = await this.projectService
+      .createProject({
+        name,
+        description,
+        environment,
+        creatorId,
+      })
+      .toPromise();
+
+    return {
+      id: Number(resp.id),
+      name: resp.name,
+      environment: resp.environment,
+      description: resp.description,
+    };
   }
 
-  async findMany(dto: FindProjectDto): Promise<ProjectListResponse> {
-    const { page, offset, limit, creatorId } = dto;
+  async findMany(dto: FindProjectDto, creatorId: number): Promise<ProjectListResponse> {
+    const { offset, limit } = dto;
 
     const resp = await this.projectService
       .findProjectList({ creatorId, limit, offset })
       .toPromise();
 
-    // resp.page = page;
     if (resp.data && resp.data.length > 0) {
       resp.data = resp.data.map((project) => {
         return {
@@ -46,10 +60,25 @@ export class ProjectService implements OnModuleInit {
   }
 
   async update(id: number, updateProjectDto: UpdateProjectDto) {
-    return `This action updates a #${id} project`;
+    const { name, description, environment } = updateProjectDto;
+    const resp = await this.projectService
+      .updateProject({
+        id,
+        name,
+        description,
+        environment,
+      })
+      .toPromise();
+
+    return {
+      id: Number(resp.id),
+      name: resp.name,
+      environment: resp.environment,
+      description: resp.description,
+    };
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} project`;
+    throw new Error('Project remove is not support currently.');
   }
 }
