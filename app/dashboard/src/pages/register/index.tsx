@@ -11,17 +11,21 @@ import {
   Heading,
   Text,
   useColorModeValue,
-  Link,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { useTranslate } from "@refinedev/core";
+import { useTranslate, useNotification } from "@refinedev/core";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
+import { register } from "../../api/auth";
 
 export const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const translate = useTranslate();
   const navigate = useNavigate();
+  const { open, close } = useNotification();
+
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
     <Flex
@@ -38,14 +42,26 @@ export const Register = () => {
         </Stack>
         <Box rounded={"lg"} bg={useColorModeValue("white", "gray.700")} boxShadow={"lg"} p={8}>
           <Stack spacing={4}>
-            <FormControl id="name">
+            <FormControl id="name" isRequired>
               <FormLabel>{translate("pages.register.fields.name")}</FormLabel>
-              <Input type="text" />
+              <Input
+                type="text"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+              />
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>{translate("pages.register.fields.password")}</FormLabel>
               <InputGroup>
-                <Input type={showPassword ? "text" : "password"} />
+                <Input
+                  value={password}
+                  type={showPassword ? "text" : "password"}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                />
                 <InputRightElement h={"full"}>
                   <Button
                     variant={"ghost"}
@@ -64,6 +80,20 @@ export const Register = () => {
                 color={"white"}
                 _hover={{
                   bg: "blue.500",
+                }}
+                onClick={() => {
+                  register(name, password)
+                    .then(() => {
+                      navigate("/login");
+                    })
+                    .catch((err) => {
+                      console.error(err);
+                      open?.({
+                        type: "error",
+                        message: translate("pages.register.errors.registerFailed"),
+                        description: translate("pages.register.errors.registerFailedMsg"),
+                      });
+                    });
                 }}
               >
                 {translate("pages.register.buttons.submit")}

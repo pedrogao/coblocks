@@ -4,12 +4,12 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Checkbox,
   Stack,
   Button,
   Heading,
   Text,
   useColorModeValue,
+  Spacer,
 } from "@chakra-ui/react";
 import { useTranslate, useLogin } from "@refinedev/core";
 import { useState } from "react";
@@ -21,7 +21,6 @@ export const Login = () => {
   const { mutate: login } = useLogin();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(false);
 
   const navigate = useNavigate();
 
@@ -57,16 +56,7 @@ export const Login = () => {
                 align={"start"}
                 justify={"space-between"}
               >
-                <Checkbox
-                  fontSize="sm"
-                  isChecked={remember}
-                  onChange={(e) => {
-                    // @ts-ignore
-                    setRemember(e.target.checked);
-                  }}
-                >
-                  {translate("pages.login.buttons.rememberMe")}
-                </Checkbox>
+                <Spacer />
                 <Text
                   color={"blue.400"}
                   _hover={{
@@ -90,15 +80,13 @@ export const Login = () => {
 
                   // get form data
                   const form = {
-                    name,
+                    username: name,
                     password,
-                    remember,
                   };
                   login(form);
 
                   setName("");
                   setPassword("");
-                  setRemember(false);
                 }}
               >
                 {translate("pages.login.signin")}

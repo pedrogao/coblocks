@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Request } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
@@ -9,16 +9,15 @@ export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
   @Post()
-  async create(@Body() createProjectDto: CreateProjectDto) {
-    return this.projectService.create(createProjectDto);
+  async create(@Body() createProjectDto: CreateProjectDto, @Request() req: any) {
+    const creatorId = req.user.id;
+    return this.projectService.create(createProjectDto, creatorId);
   }
 
-  /**
-   * limit=10&page=1&offset=0
-   */
   @Get()
-  async findMany(@Query() dto: FindProjectDto) {
-    return this.projectService.findMany(dto);
+  async findMany(@Query() dto: FindProjectDto, @Request() req: any) {
+    const creatorId = req.user.id;
+    return this.projectService.findMany(dto, creatorId);
   }
 
   @Get(':id')

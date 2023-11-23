@@ -10,7 +10,9 @@
         "password": "Password"
       },
       "errors": {
-        "validEmail": "Invalid email address"
+        "validEmail": "Invalid email address",
+        "loginFailed": "Login Failed",
+        "loginFailedMsg": "Invalid username or password"
       },
       "buttons": {
         "submit": "Login",
@@ -38,7 +40,9 @@
         "password": "Password"
       },
       "errors": {
-        "validEmail": "Invalid email address"
+        "validEmail": "Invalid email address",
+        "registerFailed": "Register Failed",
+        "registerFailedMsg": "Invalid username or password"
       },
       "buttons": {
         "submit": "Register",

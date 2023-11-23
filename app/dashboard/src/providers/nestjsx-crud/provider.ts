@@ -3,17 +3,12 @@ import { CondOperator, RequestQueryBuilder } from "@nestjsx/crud-request";
 import { transformHttpError } from "@refinedev/nestjsx-crud";
 import { AxiosInstance } from "axios";
 import queryString from "query-string";
-import {
-  axiosInstance,
-  handleFilter,
-  handleJoin,
-  handlePagination,
-  handleSort,
-} from "./utils";
+import { handleFilter, handleJoin, handlePagination, handleSort } from "./utils";
+import { axiosInstance } from "../../api/axios";
 
 export const dataProvider = (
   apiUrl: string,
-  httpClient: AxiosInstance = axiosInstance
+  httpClient: AxiosInstance = axiosInstance,
 ): Required<DataProvider> => ({
   getList: async ({ resource, pagination, filters, sorters, meta }) => {
     const url = `${apiUrl}/${resource}`;
@@ -26,14 +21,6 @@ export const dataProvider = (
     query = handleSort(query, sorters);
 
     let queryStr = query.query();
-    if (resource === "projects") {
-      if (meta?.creatorId) {
-        queryStr += `&creatorId=${meta.creatorId}`;
-      } else {
-        throw new Error("creatorId is required");
-      }
-    }
-
     const { data } = await httpClient.get(`${url}?${queryStr}`);
 
     // without pagination
@@ -107,17 +94,14 @@ export const dataProvider = (
     const response = await Promise.all(
       ids.map(async (id) => {
         try {
-          const { data } = await httpClient.patch(
-            `${apiUrl}/${resource}/${id}`,
-            variables
-          );
+          const { data } = await httpClient.patch(`${apiUrl}/${resource}/${id}`, variables);
           return data;
         } catch (error) {
           const httpError = transformHttpError(error);
 
           errors.push(httpError);
         }
-      })
+      }),
     );
 
     if (errors.length > 0) {
@@ -168,7 +152,7 @@ export const dataProvider = (
       ids.map(async (id) => {
         const { data } = await httpClient.delete(`${apiUrl}/${resource}/${id}`);
         return data;
-      })
+      }),
     );
     return { data: response };
   },
@@ -177,16 +161,7 @@ export const dataProvider = (
     return apiUrl;
   },
 
-  custom: async ({
-    url,
-    method,
-    meta,
-    filters,
-    sorters,
-    payload,
-    query,
-    headers,
-  }) => {
+  custom: async ({ url, method, meta, filters, sorters, payload, query, headers }) => {
     let requestQueryBuilder = RequestQueryBuilder.create();
 
     requestQueryBuilder = handleFilter(requestQueryBuilder, filters);

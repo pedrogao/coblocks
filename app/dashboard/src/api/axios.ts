@@ -1,7 +1,15 @@
 import { HttpError } from "@refinedev/core";
 import axios from "axios";
 
-export const axiosInstance = axios.create();
+export const API_URL = "http://localhost:3000";
+
+export const TOKEN_KEY = "coblocks-access-token";
+
+export const axiosInstance = axios.create({
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 axiosInstance.interceptors.response.use(
   (response) => {
@@ -15,5 +23,5 @@ axiosInstance.interceptors.response.use(
     };
 
     return Promise.reject(customError);
-  }
+  },
 );

@@ -22,15 +22,10 @@ import { Header, Title } from "./components";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
-import {
-  ProjectList,
-  ProjectCreate,
-  ProjectEdit,
-  ProjectShow,
-} from "./pages/projects";
+import { ProjectList, ProjectCreate, ProjectEdit, ProjectShow } from "./pages/projects";
+import { API_URL } from "./api/axios";
 
 function App() {
-  const API_URL = "http://localhost:3000";
   const dataProvider = nestjsxCrudDataProvider(API_URL);
 
   const { t, i18n } = useTranslation();
@@ -78,19 +73,13 @@ function App() {
                     key="authenticated-inner"
                     fallback={<CatchAllNavigate to="/login" />}
                   >
-                    <ThemedLayoutV2
-                      Header={() => <Header sticky />}
-                      Title={Title}
-                    >
+                    <ThemedLayoutV2 Header={() => <Header sticky />} Title={Title}>
                       <Outlet />
                     </ThemedLayoutV2>
                   </Authenticated>
                 }
               >
-                <Route
-                  index
-                  element={<NavigateToResource resource="projects" />}
-                />
+                <Route index element={<NavigateToResource resource="projects" />} />
                 <Route path="/projects">
                   <Route index element={<ProjectList />} />
                   <Route path="create" element={<ProjectCreate />} />
@@ -101,10 +90,7 @@ function App() {
               </Route>
               <Route
                 element={
-                  <Authenticated
-                    key="authenticated-outer"
-                    fallback={<Outlet />}
-                  >
+                  <Authenticated key="authenticated-outer" fallback={<Outlet />}>
                     <NavigateToResource />
                   </Authenticated>
                 }

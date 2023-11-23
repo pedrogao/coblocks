@@ -1,6 +1,5 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { Observable } from 'rxjs';
 import { Metadata } from '@grpc/grpc-js';
 import {
   UserServiceController,
@@ -18,7 +17,7 @@ export class UserController implements UserServiceController {
   constructor(private userService: UserService) {}
 
   @GrpcMethod(USER_SERVICE_NAME, 'findUser')
-  findUser(request: FindUserRequest, metadata?: Metadata): User | Promise<User> | Observable<User> {
+  async findUser(request: FindUserRequest, metadata?: Metadata): Promise<User> {
     return this.userService.findUser(request.name).then((user) => {
       return {
         id: Number(user.id),
@@ -30,10 +29,7 @@ export class UserController implements UserServiceController {
   }
 
   @GrpcMethod(USER_SERVICE_NAME, 'createUser')
-  createUser(
-    request: CreateUserRequest,
-    metadata?: Metadata,
-  ): User | Promise<User> | Observable<User> {
+  async createUser(request: CreateUserRequest, metadata?: Metadata): Promise<User> {
     return this.userService
       .createUser({
         name: request.name,
