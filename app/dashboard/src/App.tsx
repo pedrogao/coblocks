@@ -23,6 +23,7 @@ import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
 import { ProjectList, ProjectCreate, ProjectEdit, ProjectShow } from "./pages/projects";
+import { RoomList, RoomCreate, RoomEdit, RoomShow } from "./pages/rooms";
 import { API_URL } from "./api/axios";
 
 function App() {
@@ -58,6 +59,16 @@ function App() {
                   canDelete: true,
                 },
               },
+              {
+                name: "rooms",
+                list: "/rooms",
+                create: "/rooms/create",
+                edit: "/rooms/edit/:id",
+                show: "/rooms/show/:id",
+                meta: {
+                  canDelete: true,
+                },
+              },
             ]}
             options={{
               syncWithLocation: true,
@@ -80,12 +91,21 @@ function App() {
                 }
               >
                 <Route index element={<NavigateToResource resource="projects" />} />
+
                 <Route path="/projects">
                   <Route index element={<ProjectList />} />
                   <Route path="create" element={<ProjectCreate />} />
                   <Route path="edit/:id" element={<ProjectEdit />} />
                   <Route path="show/:id" element={<ProjectShow />} />
                 </Route>
+
+                <Route path="/rooms">
+                  <Route index element={<RoomList />} />
+                  <Route path="create" element={<RoomCreate />} />
+                  <Route path="edit/:id" element={<RoomEdit />} />
+                  <Route path="show/:id" element={<RoomShow />} />
+                </Route>
+
                 <Route path="*" element={<ErrorComponent />} />
               </Route>
               <Route

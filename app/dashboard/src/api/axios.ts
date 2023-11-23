@@ -8,6 +8,7 @@ export const TOKEN_KEY = "coblocks-access-token";
 export const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
   },
 });
 

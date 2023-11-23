@@ -16,9 +16,10 @@ export interface CreateRoomRequest {
 }
 
 export interface FindRoomListRequest {
-  projectId: number;
+  projectId?: number | undefined;
   limit: number;
   offset: number;
+  creatorId: number;
 }
 
 export interface FindRoomListResponse {
