@@ -160,6 +160,21 @@
       "show": "Show Project"
     }
   },
+  "rooms": {
+    "rooms": "Rooms",
+    "fields": {
+      "id": "Id",
+      "name": "Name",
+      "projectId": "ProjectId",
+      "status": "Status"
+    },
+    "titles": {
+      "create": "Create Room",
+      "edit": "Edit Room",
+      "list": "Rooms",
+      "show": "Show Room"
+    }
+  },
   "documentTitle": {
     "default": "refine",
     "suffix": " | refine",

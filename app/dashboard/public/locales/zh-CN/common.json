@@ -128,6 +128,21 @@
       "show": "项目详情"
     }
   },
+  "rooms": {
+    "rooms": "房间",
+    "fields": {
+      "id": "Id",
+      "name": "名称",
+      "projectId": "项目Id",
+      "status": "状态"
+    },
+    "titles": {
+      "create": "新建房间",
+      "edit": "编辑房间",
+      "list": "房间列表",
+      "show": "房间详情"
+    }
+  },
   "documentTitle": {
     "default": "coblcoks",
     "suffix": " | coblcoks",

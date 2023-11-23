@@ -3,7 +3,8 @@ import { Room } from '@prisma/client';
 import { PrismaService } from './prisma.service';
 
 interface FindRoomListParams {
-  projectId: number;
+  projectId?: number;
+  creatorId: number;
   limit: number;
   offset: number;
 }
@@ -12,17 +13,21 @@ interface FindRoomListParams {
 export class RoomService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findRoomList({ projectId, limit, offset }: FindRoomListParams) {
+  async findRoomList({ projectId, limit, offset, creatorId }: FindRoomListParams) {
     const prisma = this.prismaService;
 
+    const condition = {
+      where: {
+        creator_id: creatorId,
+      },
+      take: limit,
+      skip: offset,
+    };
+    if (projectId) {
+      condition.where['project_id'] = projectId;
+    }
     const [rooms, total] = await prisma.$transaction([
-      prisma.room.findMany({
-        where: {
-          project_id: projectId,
-        },
-        take: limit,
-        skip: offset,
-      }),
+      prisma.room.findMany(condition),
       prisma.room.count(),
     ]);
     return {

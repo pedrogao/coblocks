@@ -5,6 +5,7 @@ import { ProjectModule } from './project/project.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { RoomModule } from './room/room.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -15,6 +16,7 @@ import configuration from './config/configuration';
     ProjectModule,
     AuthModule,
     UserModule,
+    RoomModule,
   ],
   controllers: [AppController],
   providers: [],
