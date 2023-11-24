@@ -1,9 +1,10 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { CreateRoomDto } from './dto/create-room.dto';
-import { UpdateRoomDto } from './dto/update-room.dto';
 import { ROOM_SERVICE_NAME, RoomServiceClient } from '@coblocks/proto';
 import { ClientGrpc } from '@nestjs/microservices';
+import { CreateRoomDto } from './dto/create-room.dto';
+import { UpdateRoomDto } from './dto/update-room.dto';
 import { FindRoomDto } from './dto/find-room.dto';
+import { FindManyDto } from './dto/find-many.dto';
 
 @Injectable()
 export class RoomService implements OnModuleInit {
@@ -20,12 +21,15 @@ export class RoomService implements OnModuleInit {
   }
 
   async findMany(query: FindRoomDto, creatorId: number) {
+    const param = FindManyDto.fromFindRoomDto(query);
+
     const resp = await this.roomClient
       .findRoomList({
-        projectId: query.projectId,
-        limit: query.limit,
-        offset: query.offset,
+        limit: param.limit,
+        offset: param.offset,
         creatorId,
+        s: param.s,
+        sorters: param.sort,
       })
       .toPromise();
 
