@@ -23,15 +23,7 @@ export class RoomController implements RoomServiceController {
     request: FindRoomListRequest,
     metadata?: Metadata,
   ): Promise<FindRoomListResponse> {
-    const contidion = {
-      limit: request.limit,
-      offset: request.offset,
-      creatorId: Number(request.creatorId),
-    } as any;
-    if (request.projectId) {
-      contidion.projectId = Number(request.projectId);
-    }
-    const { rooms, total } = await this.roomService.findRoomList(contidion);
+    const { rooms, total } = await this.roomService.findRoomList(request);
 
     return {
       count: request.limit,

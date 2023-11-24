@@ -2,6 +2,7 @@
 import { Metadata } from "@grpc/grpc-js";
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
+import { SortTuple } from "./common";
 
 export interface UpdateRoomRequest {
   id: number;
@@ -16,10 +17,11 @@ export interface CreateRoomRequest {
 }
 
 export interface FindRoomListRequest {
-  projectId?: number | undefined;
   limit: number;
   offset: number;
   creatorId: number;
+  s: string;
+  sorters: SortTuple[];
 }
 
 export interface FindRoomListResponse {

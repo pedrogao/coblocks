@@ -11,8 +11,11 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         name: 'room',
         transport: Transport.GRPC,
         options: {
-          package: ['room'],
-          protoPath: [join(__dirname, '../', 'pb/room.proto')],
+          package: ['common', 'room'],
+          protoPath: [
+            join(__dirname, '../', 'pb/common.proto'),
+            join(__dirname, '../', 'pb/room.proto'),
+          ],
         },
       },
     ]),

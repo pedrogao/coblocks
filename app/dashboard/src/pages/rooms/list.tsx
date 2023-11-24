@@ -15,6 +15,8 @@ import {
   Button,
   IconButton,
   Box,
+  Input,
+  Text,
 } from "@chakra-ui/react";
 import { IconChevronRight, IconChevronLeft } from "@tabler/icons-react";
 
@@ -26,21 +28,35 @@ export const RoomList: React.FC<IResourceComponentsProps> = () => {
         id: "projectId",
         accessorKey: "projectId",
         header: translate("rooms.fields.projectId"),
+        enableColumnFilter: true,
+        enableSorting: true,
+        meta: {
+          filterOperator: "eq",
+        },
       },
       {
         id: "id",
         accessorKey: "id",
         header: translate("rooms.fields.id"),
+        enableColumnFilter: true,
+        enableSorting: true,
+        meta: {
+          filterOperator: "eq",
+        },
       },
       {
         id: "name",
         accessorKey: "name",
         header: translate("rooms.fields.name"),
+        enableColumnFilter: false,
+        enableSorting: false,
       },
       {
         id: "status",
         accessorKey: "status",
         header: translate("rooms.fields.status"),
+        enableColumnFilter: false,
+        enableSorting: false,
         cell: function render({ getValue }) {
           return <span>{getValue() === 1 ? "Active" : "Inactive"}</span>;
         },
@@ -49,6 +65,8 @@ export const RoomList: React.FC<IResourceComponentsProps> = () => {
         id: "actions",
         accessorKey: "id",
         header: translate("table.actions"),
+        enableColumnFilter: false,
+        enableSorting: false,
         cell: function render({ getValue }) {
           const val = `${getValue()}`;
           return (
@@ -72,10 +90,26 @@ export const RoomList: React.FC<IResourceComponentsProps> = () => {
       setCurrent,
       pageCount,
       current,
+      sorters,
+      setSorters,
       tableQueryResult: { data: tableData },
     },
   } = useTable({
     columns,
+    refineCoreProps: {
+      sorters: {
+        initial: [
+          {
+            field: "projectId",
+            order: "asc",
+          },
+          {
+            field: "id",
+            order: "asc",
+          },
+        ],
+      },
+    },
   });
 
   setOptions((prev) => ({
@@ -90,16 +124,51 @@ export const RoomList: React.FC<IResourceComponentsProps> = () => {
       <TableContainer whiteSpace="pre-line">
         <Table variant="simple">
           <Thead>
-            {getHeaderGroups().map((headerGroup) => (
-              <Tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <Th key={header.id}>
-                    {!header.isPlaceholder &&
-                      flexRender(header.column.columnDef.header, header.getContext())}
-                  </Th>
-                ))}
-              </Tr>
-            ))}
+            {getHeaderGroups().map((headerGroup) => {
+              return (
+                <Tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    const sortLabel = header.column.getCanSort()
+                      ? {
+                          asc: " ⬆️",
+                          desc: " ⬇️",
+                          false: " 🈚",
+                        }[`${header.column.getIsSorted()}`]
+                      : "";
+
+                    return (
+                      <Th key={header.id}>
+                        <Box>
+                          {!header.isPlaceholder &&
+                            flexRender(header.column.columnDef.header, header.getContext())}
+                          <Text
+                            as="span"
+                            fontSize="xs"
+                            onClick={header.column.getToggleSortingHandler()}
+                          >
+                            {sortLabel}
+                          </Text>
+                          {header.column.getCanFilter() && (
+                            <Input
+                              variant="flushed"
+                              size="xs"
+                              marginLeft={3}
+                              htmlSize={8}
+                              width="auto"
+                              value={header.column.getFilterValue() as string}
+                              onChange={(e) => {
+                                header.column.setFilterValue(e.target.value);
+                              }}
+                              placeholder={"🔍"}
+                            />
+                          )}
+                        </Box>
+                      </Th>
+                    );
+                  })}
+                </Tr>
+              );
+            })}
           </Thead>
           <Tbody>
             {getRowModel().rows.map((row) => (

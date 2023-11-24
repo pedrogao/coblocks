@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Request } from '@nestjs/common';
+import { Request as RawRequest } from 'express';
 import { RoomService } from './room.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
@@ -14,7 +15,7 @@ export class RoomController {
   }
 
   @Get()
-  async findMany(@Query() query: FindRoomDto, @Request() req: any) {
+  async findMany(@Query() query: FindRoomDto, @Request() req: RawRequest & { user: any }) {
     const creatorId = req.user.id;
     return this.roomService.findMany(query, creatorId);
   }

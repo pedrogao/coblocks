@@ -17,8 +17,9 @@ export class FindRoomDto {
   @Min(0)
   offset: number;
 
-  @IsInt()
-  @Type(() => Number)
   @IsOptional()
-  projectId?: number;
+  s?: string;
+
+  @IsOptional()
+  sort?: string[];
 }
