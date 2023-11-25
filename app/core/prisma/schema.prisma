@@ -24,7 +24,7 @@ model Project {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model ProjectAPIKey {
-  id            BigInt    @id @default(0) @db.UnsignedBigInt
+  id            BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
   project_id    BigInt    @default(0) @db.UnsignedBigInt
   api_key       String    @default("") @db.VarChar(200)
   room_list     Json?
@@ -42,9 +42,9 @@ model ProjectAPIKey {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model Room {
-  id            BigInt    @id @default(0) @db.UnsignedBigInt
+  id            BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
   name          String    @default("") @db.VarChar(200)
-  project_id    BigInt    @default(autoincrement()) @db.UnsignedBigInt
+  project_id    BigInt    @db.UnsignedBigInt
   status        Boolean?  @default(true)
   creator_id    BigInt    @db.UnsignedBigInt
   delete_status Int       @default(0) @db.TinyInt
@@ -53,14 +53,13 @@ model Room {
   delete_time   DateTime? @db.DateTime(0)
 
   @@unique([name, creator_id], map: "idx_name_creator_id")
-  @@index([project_id, status], map: "idx_project_id_status")
   @@map("t_room")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model RoomDoc {
-  id          BigInt   @id @default(0) @db.UnsignedBigInt
-  room_id     BigInt   @default(0) @db.UnsignedBigInt
+  id          BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  room_id     BigInt   @db.UnsignedBigInt
   doc         String?  @db.Text
   creator_id  BigInt   @db.UnsignedBigInt
   create_time DateTime @default(now()) @db.DateTime(0)
@@ -72,8 +71,8 @@ model RoomDoc {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model RoomHook {
-  id            BigInt    @id @default(0) @db.UnsignedBigInt
-  room_id       BigInt    @default(0) @db.UnsignedBigInt
+  id            BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  room_id       BigInt    @db.UnsignedBigInt
   header        Json?
   body          Json?
   url           String    @default("") @db.VarChar(200)
@@ -91,8 +90,8 @@ model RoomHook {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model RoomMetadata {
-  id          BigInt   @id @default(0) @db.UnsignedBigInt
-  room_id     BigInt   @default(0) @db.UnsignedBigInt
+  id          BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  room_id     BigInt   @db.UnsignedBigInt
   metadata    Json?
   creator_id  BigInt   @db.UnsignedBigInt
   create_time DateTime @default(now()) @db.DateTime(0)

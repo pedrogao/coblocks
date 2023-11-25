@@ -10,10 +10,5 @@ export class FindProjectDto {
   @IsInt()
   @Type(() => Number)
   @Min(0)
-  page: number;
-
-  @IsInt()
-  @Type(() => Number)
-  @Min(0)
   offset: number;
 }

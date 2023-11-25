@@ -42,7 +42,7 @@ export class ProjectService implements OnModuleInit {
       .toPromise();
 
     return {
-      data: resp.data,
+      data: resp.data || [],
       total: resp.total,
       count: limit,
       page: Math.ceil(offset / limit) + 1,
@@ -50,8 +50,19 @@ export class ProjectService implements OnModuleInit {
     };
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} project`;
+  async findOne(id: string) {
+    const resp = await this.projectService
+      .findProject({
+        id,
+      })
+      .toPromise();
+
+    return {
+      id: resp.id,
+      name: resp.name,
+      environment: resp.environment,
+      description: resp.description,
+    };
   }
 
   async update(id: string, updateProjectDto: UpdateProjectDto) {
@@ -73,7 +84,15 @@ export class ProjectService implements OnModuleInit {
     };
   }
 
-  async remove(id: number) {
-    throw new Error('Project remove is not support currently.');
+  async remove(id: string) {
+    await this.projectService
+      .deleteProject({
+        id,
+      })
+      .toPromise();
+
+    return {
+      message: 'ok',
+    };
   }
 }

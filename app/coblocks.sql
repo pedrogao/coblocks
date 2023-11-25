@@ -27,7 +27,7 @@ CREATE TABLE `t_project` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='项目表';
 
 CREATE TABLE `t_project_api_key` (
-  `id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '自增ID',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `project_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '房间ID',
   `api_key` varchar(200) NOT NULL DEFAULT '' COMMENT 'api_key',
   `room_list` json COMMENT '房间列表',
@@ -44,9 +44,9 @@ CREATE TABLE `t_project_api_key` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='项目api_key表';
 
 CREATE TABLE `t_room` (
-  `id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '房间ID',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `name` varchar(200) NOT NULL DEFAULT '' COMMENT '房间名',
-  `project_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '项目ID',
+  `project_id` bigint(20) unsigned NOT NULL COMMENT '项目ID',
   `status` tinyint(1) DEFAULT '1' COMMENT '状态：0-关闭，1-打开',
   `creator_id` bigint(20) unsigned NOT NULL COMMENT '创建人',
   `delete_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态：0-正常，1-删除，2-归档',
@@ -54,13 +54,12 @@ CREATE TABLE `t_room` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `idx_name_creator_id` (`name`,`creator_id`),
-  KEY `idx_project_id_status` (`project_id`,`status`)
+  UNIQUE KEY `idx_name_creator_id` (`name`,`creator_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='房间表';
 
 CREATE TABLE `t_room_doc` (
-  `id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '自增ID',
-  `room_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '房间ID',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `room_id` bigint(20) unsigned NOT NULL COMMENT '房间ID',
   `doc` text COMMENT '文档数据',
 
   `creator_id` bigint(20) unsigned NOT NULL COMMENT '创建人',
@@ -71,8 +70,8 @@ CREATE TABLE `t_room_doc` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='房间文档表';
 
 CREATE TABLE `t_room_metadata` (
-  `id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '自增ID',
-  `room_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '房间ID',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `room_id` bigint(20) unsigned NOT NULL COMMENT '房间ID',
   `metadata` json COMMENT '元信息',
 
   `creator_id` bigint(20) unsigned NOT NULL COMMENT '创建人',
@@ -83,8 +82,8 @@ CREATE TABLE `t_room_metadata` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='房间元信息表';
 
 CREATE TABLE `t_room_hook` (
-  `id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '自增ID',
-  `room_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '房间ID',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `room_id` bigint(20) unsigned NOT NULL COMMENT '房间ID',
   `header` json COMMENT '请求头',
   `body` json COMMENT '请求体',
   `url` varchar(200) NOT NULL DEFAULT '' COMMENT 'url',

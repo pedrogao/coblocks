@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Room } from '@prisma/client';
 import { PrismaService } from '../dao/prisma.service';
 import { FindRoomListRequest } from '@coblocks/proto';
-import { camelToSnake } from '@coblocks/common';
+import { DeleteStatus, camelToSnake } from '@coblocks/common';
 
 @Injectable()
 export class RoomService {
@@ -15,7 +15,8 @@ export class RoomService {
     const query = convertQuery(filters);
     const condition = {
       where: {
-        creator_id: Number(creatorId),
+        creator_id: BigInt(creatorId),
+        delete_status: DeleteStatus.Normal,
         ...query,
       },
       take: limit,
@@ -64,6 +65,7 @@ export class RoomService {
     return this.prismaService.room.update({
       where: {
         id: id as number,
+        delete_status: DeleteStatus.Normal,
       },
       data: {
         status,
@@ -72,9 +74,14 @@ export class RoomService {
   }
 
   async deleteRoom(id: number | string) {
-    return this.prismaService.room.delete({
+    return this.prismaService.room.update({
       where: {
-        id: id as number,
+        id: BigInt(id),
+        delete_status: DeleteStatus.Normal,
+      },
+      data: {
+        delete_status: DeleteStatus.Deleted,
+        delete_time: new Date(),
       },
     });
   }
@@ -82,7 +89,8 @@ export class RoomService {
   async findRoom(id: number | string) {
     return this.prismaService.room.findUnique({
       where: {
-        id: id as number,
+        id: BigInt(id),
+        delete_status: DeleteStatus.Normal,
       },
     });
   }

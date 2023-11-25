@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Project } from '@prisma/client';
 import { PrismaService } from '../dao/prisma.service';
+import { DeleteStatus } from '@coblocks/common';
 
 interface FindProjectListParams {
   creatorId: number;
@@ -19,6 +20,7 @@ export class ProjectService {
       prisma.project.findMany({
         where: {
           creator_id: creatorId,
+          delete_status: DeleteStatus.Normal,
         },
         take: limit,
         skip: offset,
@@ -65,7 +67,8 @@ export class ProjectService {
   }): Promise<Project> {
     return this.prismaService.project.update({
       where: {
-        id: id as number,
+        id: BigInt(id),
+        delete_status: DeleteStatus.Normal,
       },
       data: {
         name,
@@ -78,15 +81,21 @@ export class ProjectService {
   async findProject(id: string | number) {
     return this.prismaService.project.findFirst({
       where: {
-        id: id as number,
+        id: BigInt(id),
+        delete_status: DeleteStatus.Normal,
       },
     });
   }
 
-  async deleteProject(id: string | number) {
-    return this.prismaService.project.delete({
+  async deleteProject(id: string) {
+    return this.prismaService.project.update({
       where: {
-        id: id as number,
+        id: BigInt(id),
+        delete_status: DeleteStatus.Normal,
+      },
+      data: {
+        delete_time: new Date(),
+        delete_status: DeleteStatus.Deleted,
       },
     });
   }

@@ -1,7 +1,7 @@
 import React from "react";
 import { IResourceComponentsProps, useTranslate } from "@refinedev/core";
 import { Edit } from "@refinedev/chakra-ui";
-import { FormControl, FormLabel, FormErrorMessage, Input } from "@chakra-ui/react";
+import { FormControl, FormLabel, FormErrorMessage, Input, Select } from "@chakra-ui/react";
 import { useForm } from "@refinedev/react-hook-form";
 
 export const RoomEdit: React.FC<IResourceComponentsProps> = () => {
@@ -15,6 +15,17 @@ export const RoomEdit: React.FC<IResourceComponentsProps> = () => {
   } = useForm();
 
   const roomsData = queryResult?.data?.data;
+
+  const statusOptions = [
+    {
+      label: "Opened",
+      value: "Opened",
+    },
+    {
+      label: "Closed",
+      value: "Closed",
+    },
+  ];
 
   return (
     <Edit isLoading={formLoading} saveButtonProps={saveButtonProps}>
@@ -43,12 +54,18 @@ export const RoomEdit: React.FC<IResourceComponentsProps> = () => {
 
       <FormControl mb="3" isInvalid={!!(errors as any)?.["status"]}>
         <FormLabel>{translate("rooms.fields.status")}</FormLabel>
-        <Input
-          type="text"
+        <Select
+          placeholder="Select status"
           {...register("status", {
             required: "This field is required",
           })}
-        />
+        >
+          {statusOptions.map((option) => (
+            <option value={option.value} key={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </Select>
         <FormErrorMessage>{(errors as any)?.["status"]?.message as string}</FormErrorMessage>
       </FormControl>
     </Edit>

@@ -25,7 +25,6 @@ import { Register } from "./pages/register";
 import { ProjectList, ProjectCreate, ProjectEdit, ProjectShow } from "./pages/projects";
 import { RoomList, RoomCreate, RoomEdit, RoomShow } from "./pages/rooms";
 import { API_URL } from "./api/axios";
-import { IconMushroom } from "@tabler/icons-react";
 
 function App() {
   const dataProvider = nestjsxCrudDataProvider(API_URL);

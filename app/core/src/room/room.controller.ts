@@ -14,6 +14,7 @@ import {
   VoidResponse,
 } from '@coblocks/proto';
 import { RoomService } from './room.service';
+import { RoomStatus } from '@coblocks/common';
 
 @Controller()
 @RoomServiceControllerMethods()
@@ -31,7 +32,7 @@ export class RoomController implements RoomServiceController {
       name: room.name,
       projectId: room.project_id.toString(),
       creatorId: room.creator_id.toString(),
-      status: room.status ? 1 : 0,
+      status: room.status ? RoomStatus.Opened : RoomStatus.Closed,
     };
   }
 
@@ -64,7 +65,7 @@ export class RoomController implements RoomServiceController {
           name: room.name,
           projectId: room.project_id.toString(),
           creatorId: room.creator_id.toString(),
-          status: room.status ? 1 : 0,
+          status: room.status ? RoomStatus.Opened : RoomStatus.Closed,
         };
       }),
     };
@@ -77,7 +78,7 @@ export class RoomController implements RoomServiceController {
         name: request.name,
         projectId: request.projectId,
         creatorId: request.creatorId,
-        status: request.status === 1,
+        status: request.status === RoomStatus.Opened,
       })
       .then((room) => {
         return {
@@ -85,7 +86,7 @@ export class RoomController implements RoomServiceController {
           name: room.name,
           projectId: room.project_id.toString(),
           creatorId: room.creator_id.toString(),
-          status: room.status ? 1 : 0,
+          status: room.status ? RoomStatus.Opened : RoomStatus.Closed,
         };
       });
   }
@@ -95,7 +96,7 @@ export class RoomController implements RoomServiceController {
     return this.roomService
       .updateRoom({
         id: request.id,
-        status: request.status === 1,
+        status: request.status === RoomStatus.Opened,
       })
       .then((room) => {
         return {
@@ -103,7 +104,7 @@ export class RoomController implements RoomServiceController {
           name: room.name,
           projectId: room.project_id.toString(),
           creatorId: room.creator_id.toString(),
-          status: room.status ? 1 : 0,
+          status: room.status ? RoomStatus.Opened : RoomStatus.Closed,
         };
       });
   }

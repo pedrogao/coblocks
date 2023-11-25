@@ -17,8 +17,22 @@ export class RoomService implements OnModuleInit {
     this.roomClient = this.client.getService<RoomServiceClient>(ROOM_SERVICE_NAME);
   }
 
-  async create(createRoomDto: CreateRoomDto) {
-    return 'This action adds a new room';
+  async create(createRoomDto: CreateRoomDto, creatorId: string) {
+    const resp = await this.roomClient
+      .createRoom({
+        name: createRoomDto.name,
+        projectId: createRoomDto.projectId,
+        creatorId,
+        status: createRoomDto.status === 'Opened' ? RoomStatus.Opened : RoomStatus.Closed,
+      })
+      .toPromise();
+
+    return {
+      id: resp.id,
+      name: resp.name,
+      projectId: resp.projectId,
+      status: resp.status === RoomStatus.Opened ? 'Opened' : 'Closed',
+    };
   }
 
   async findMany(query: FindRoomDto, creatorId: string) {
@@ -35,15 +49,16 @@ export class RoomService implements OnModuleInit {
       .toPromise();
 
     return {
-      data: resp.data.map((project) => {
-        return {
-          id: project.id,
-          name: project.name,
-          projectId: project.projectId,
-          status: project.status === RoomStatus.Opened ? 'Opened' : 'Closed',
-          creatorId: project.creatorId,
-        };
-      }),
+      data:
+        resp.data?.map((project) => {
+          return {
+            id: project.id,
+            name: project.name,
+            projectId: project.projectId,
+            status: project.status === RoomStatus.Opened ? 'Opened' : 'Closed',
+            creatorId: project.creatorId,
+          };
+        }) || [],
       total: resp.total,
       count: query.limit,
       page: Math.ceil(query.offset / query.limit) + 1,
@@ -51,15 +66,44 @@ export class RoomService implements OnModuleInit {
     };
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} room`;
+  async findOne(id: string) {
+    const resp = await this.roomClient
+      .findRoom({
+        id,
+      })
+      .toPromise();
+
+    return {
+      id: resp.id,
+      name: resp.name,
+      projectId: resp.projectId,
+      status: resp.status === RoomStatus.Opened ? 'Opened' : 'Closed',
+      creatorId: resp.creatorId,
+    };
   }
 
-  async update(id: number, updateRoomDto: UpdateRoomDto) {
-    return `This action updates a #${id} room`;
+  async update(id: string, updateRoomDto: UpdateRoomDto) {
+    const resp = await this.roomClient
+      .updateRoom({
+        id,
+        status: updateRoomDto.status === 'Opened' ? RoomStatus.Opened : RoomStatus.Closed,
+      })
+      .toPromise();
+
+    return {
+      id: resp.id,
+      name: resp.name,
+      projectId: resp.projectId,
+      status: resp.status === RoomStatus.Opened ? 'Opened' : 'Closed',
+      creatorId: resp.creatorId,
+    };
   }
 
-  async remove(id: number) {
-    return `This action removes a #${id} room`;
+  async remove(id: string) {
+    await this.roomClient.deleteRoom({ id }).toPromise();
+
+    return {
+      message: 'ok',
+    };
   }
 }
