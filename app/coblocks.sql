@@ -29,6 +29,7 @@ CREATE TABLE `t_project` (
 CREATE TABLE `t_project_api_key` (
   `id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '自增ID',
   `project_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '房间ID',
+  `api_key` varchar(200) NOT NULL DEFAULT '' COMMENT 'api_key',
   `room_list` json COMMENT '房间列表',
   `permission` tinyint(4) NOT NULL DEFAULT '0' COMMENT '权限：0-none，1-read-only，2-read-write',
   `status` tinyint(1) DEFAULT '1' COMMENT '状态：0-打开，1-关闭',

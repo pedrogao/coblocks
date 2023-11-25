@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Project } from '@prisma/client';
-import { PrismaService } from './prisma.service';
+import { PrismaService } from '../dao/prisma.service';
 
 interface FindProjectListParams {
   creatorId: number;
@@ -40,14 +40,14 @@ export class ProjectService {
     name: string;
     environment: string;
     description?: string;
-    creatorId: number;
+    creatorId: number | string;
   }): Promise<Project> {
     return this.prismaService.project.create({
       data: {
         name,
         environment,
         description,
-        creator_id: creatorId,
+        creator_id: creatorId as number,
       },
     });
   }
@@ -58,19 +58,35 @@ export class ProjectService {
     environment,
     description,
   }: {
-    id: number;
+    id: number | string;
     name?: string;
     environment?: string;
     description?: string;
   }): Promise<Project> {
     return this.prismaService.project.update({
       where: {
-        id,
+        id: id as number,
       },
       data: {
         name,
         environment,
         description,
+      },
+    });
+  }
+
+  async findProject(id: string | number) {
+    return this.prismaService.project.findFirst({
+      where: {
+        id: id as number,
+      },
+    });
+  }
+
+  async deleteProject(id: string | number) {
+    return this.prismaService.project.delete({
+      where: {
+        id: id as number,
       },
     });
   }

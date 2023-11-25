@@ -24,6 +24,10 @@ export class UserController {
     if (!user) {
       throw new InternalServerErrorException('Create user failed');
     }
-    return user;
+    return {
+      id: user.id,
+      username: user.name,
+      role: user.role,
+    };
   }
 }

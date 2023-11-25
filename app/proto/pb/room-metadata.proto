@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package room_metadata;
+
+service RoomMetadataService {
+  rpc GetRoomMetadata(GetRoomMetadataRequest) returns (RoomMetadata) {}
+
+  rpc UpdateRoomMetadata(UpdateRoomMetadataRequest) returns (RoomMetadata) {}
+
+  rpc CreateRoomMetadata(CreateRoomMetadataRequest) returns (RoomMetadata) {}
+}
+
+message CreateRoomMetadataRequest {
+  string room_id = 1;
+  string metadata = 2;
+  string creator_id = 3;
+}
+
+message GetRoomMetadataRequest { string room_id = 1; }
+
+message UpdateRoomMetadataRequest {
+  string room_id = 1;
+  string metadata = 2;
+}
+
+message RoomMetadata {
+  string id = 1;
+  string room_id = 2;
+  string metadata = 3;
+  string create_time = 4;
+  string update_time = 5;
+  string creator_id = 6;
+}
