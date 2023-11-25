@@ -6,3 +6,8 @@ message SortTuple {
   string field = 1;
   string order = 2;
 }
+
+message VoidResponse {
+  bool ok = 1;
+  string error = 2;
+}

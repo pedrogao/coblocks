@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package room_doc;
+
+service RoomDocService {
+  rpc CreateRoomDoc(CreateRoomDocRequest) returns (RoomDoc) {}
+  rpc GetRoomDoc(GetRoomDocRequest) returns (RoomDoc) {}
+  rpc UpdateRoomDoc(UpdateRoomDocRequest) returns (RoomDoc) {}
+}
+
+message CreateRoomDocRequest {
+  string room_id = 1;
+  string doc = 2;
+  string creator_id = 3;
+}
+
+message GetRoomDocRequest { string room_id = 1; }
+
+message UpdateRoomDocRequest {
+  string room_id = 1;
+  string doc = 3;
+}
+
+message RoomDoc {
+  string id = 1;
+  string room_id = 2;
+  string doc = 3;
+  string create_time = 4;
+  string update_time = 5;
+  string creator_id = 6;
+}

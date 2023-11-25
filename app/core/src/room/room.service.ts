@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Room } from '@prisma/client';
-import { PrismaService } from './prisma.service';
+import { PrismaService } from '../dao/prisma.service';
 import { FindRoomListRequest } from '@coblocks/proto';
 import { camelToSnake } from '@coblocks/common';
 
@@ -46,27 +46,43 @@ export class RoomService {
     status,
   }: {
     name: string;
-    projectId: number;
-    creatorId: number;
+    projectId: number | string;
+    creatorId: number | string;
     status: boolean;
   }): Promise<Room> {
     return this.prismaService.room.create({
       data: {
         name,
-        project_id: projectId,
-        creator_id: creatorId,
+        project_id: projectId as number,
+        creator_id: creatorId as number,
         status,
       },
     });
   }
 
-  async updateRoom({ id, status }: { id: number; status: boolean }): Promise<Room> {
+  async updateRoom({ id, status }: { id: number | string; status: boolean }): Promise<Room> {
     return this.prismaService.room.update({
       where: {
-        id,
+        id: id as number,
       },
       data: {
         status,
+      },
+    });
+  }
+
+  async deleteRoom(id: number | string) {
+    return this.prismaService.room.delete({
+      where: {
+        id: id as number,
+      },
+    });
+  }
+
+  async findRoom(id: number | string) {
+    return this.prismaService.room.findUnique({
+      where: {
+        id: id as number,
       },
     });
   }

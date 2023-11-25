@@ -5,6 +5,7 @@ import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
 import { FindRoomDto } from './dto/find-room.dto';
 import { FindManyDto } from './dto/find-many.dto';
+import { RoomStatus } from '@coblocks/common';
 
 @Injectable()
 export class RoomService implements OnModuleInit {
@@ -20,7 +21,7 @@ export class RoomService implements OnModuleInit {
     return 'This action adds a new room';
   }
 
-  async findMany(query: FindRoomDto, creatorId: number) {
+  async findMany(query: FindRoomDto, creatorId: string) {
     const param = FindManyDto.fromFindRoomDto(query);
 
     const resp = await this.roomClient
@@ -33,19 +34,21 @@ export class RoomService implements OnModuleInit {
       })
       .toPromise();
 
-    if (resp.data && resp.data.length > 0) {
-      resp.data = resp.data.map((project) => {
+    return {
+      data: resp.data.map((project) => {
         return {
-          id: Number(project.id),
+          id: project.id,
           name: project.name,
-          projectId: Number(project.projectId),
-          status: project.status,
-          creatorId: Number(project.creatorId),
+          projectId: project.projectId,
+          status: project.status === RoomStatus.Opened ? 'Opened' : 'Closed',
+          creatorId: project.creatorId,
         };
-      });
-    }
-
-    return resp;
+      }),
+      total: resp.total,
+      count: query.limit,
+      page: Math.ceil(query.offset / query.limit) + 1,
+      pageCount: Math.ceil(resp.total / query.limit),
+    };
   }
 
   async findOne(id: number) {

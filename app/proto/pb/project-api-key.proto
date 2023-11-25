@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package project_api_key;
+
+import "common.proto";
+
+service ProjectAPIKeyService {
+  rpc FindProjectAPIKeyList(FindProjectAPIKeyListRequest)
+      returns (FindProjectAPIKeyListResponse) {}
+
+  rpc CreateProjectAPIKey(CreateProjectAPIKeyRequest) returns (ProjectAPIKey) {}
+
+  rpc UpdateProjectAPIKey(UpdateProjectAPIKeyRequest) returns (ProjectAPIKey) {}
+
+  rpc DeleteProjectAPIKey(DeleteProjectAPIKeyRequest)
+      returns (common.VoidResponse) {}
+}
+
+message UpdateProjectAPIKeyRequest {
+  string id = 1;
+  optional int32 permission = 2;
+  optional string room_list = 3;
+}
+
+message DeleteProjectAPIKeyRequest { string id = 1; }
+
+message CreateProjectAPIKeyRequest {
+  string project_id = 1;
+  optional int32 permission = 2;
+  string room_list = 3;
+  string api_key = 4;
+  string creator_id = 5;
+}
+
+message FindProjectAPIKeyListRequest {
+  string project_id = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+}
+
+message FindProjectAPIKeyListResponse {
+  repeated ProjectAPIKey project_api_keys = 1;
+  int32 total = 2;
+}
+
+message ProjectAPIKey {
+  string id = 1;
+  string project_id = 2;
+  int32 permission = 3;
+  string api_key = 4;
+  string room_list = 5;
+  int32 status = 6;
+  string created_time = 7;
+  string updated_time = 8;
+}

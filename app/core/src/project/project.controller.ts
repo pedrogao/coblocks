@@ -1,6 +1,5 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { Metadata } from '@grpc/grpc-js';
 import {
   ProjectServiceControllerMethods,
   ProjectServiceController,
@@ -10,19 +9,21 @@ import {
   CreateProjectRequest,
   Project,
   UpdateProjectRequest,
+  VoidResponse,
+  DeleteProjectRequest,
+  FindProjectRequest,
 } from '@coblocks/proto';
-import { ProjectService } from './dao/project.service';
+import { ProjectService } from './project.service';
 
 @Controller()
 @ProjectServiceControllerMethods()
 export class ProjectController implements ProjectServiceController {
+  private readonly logger = new Logger(ProjectController.name);
+
   constructor(private projectService: ProjectService) {}
 
   @GrpcMethod(PROJECT_SERVICE_NAME, 'findProjectList')
-  async findProjectList(
-    request: ProjectByCreatorIdRequest,
-    _metadata?: Metadata,
-  ): Promise<ProjectListResponse> {
+  async findProjectList(request: ProjectByCreatorIdRequest): Promise<ProjectListResponse> {
     const creatorId =
       typeof request.creatorId === 'number' ? request.creatorId : Number(request.creatorId);
 
@@ -33,14 +34,14 @@ export class ProjectController implements ProjectServiceController {
     });
 
     return {
-      count: request.limit,
-      page: Math.ceil(request.offset / request.limit) + 1,
+      // count: request.limit,
+      // page: Math.ceil(request.offset / request.limit) + 1,
       total,
-      pageCount: Math.ceil(total / request.limit),
+      // pageCount: Math.ceil(total / request.limit),
       data:
         projects.map((project) => {
           return {
-            id: Number(project.id),
+            id: project.id.toString(),
             name: project.name,
             environment: project.environment,
             description: project.description,
@@ -50,7 +51,7 @@ export class ProjectController implements ProjectServiceController {
   }
 
   @GrpcMethod(PROJECT_SERVICE_NAME, 'createProject')
-  async createProject(request: CreateProjectRequest, _metadata?: Metadata): Promise<Project> {
+  async createProject(request: CreateProjectRequest): Promise<Project> {
     return this.projectService
       .createProject({
         name: request.name,
@@ -60,7 +61,7 @@ export class ProjectController implements ProjectServiceController {
       })
       .then((project) => {
         return {
-          id: Number(project.id),
+          id: project.id.toString(),
           name: project.name,
           environment: project.environment,
           description: project.description,
@@ -69,7 +70,7 @@ export class ProjectController implements ProjectServiceController {
   }
 
   @GrpcMethod(PROJECT_SERVICE_NAME, 'updateProject')
-  async updateProject(request: UpdateProjectRequest, _metadata?: Metadata): Promise<Project> {
+  async updateProject(request: UpdateProjectRequest): Promise<Project> {
     return this.projectService
       .updateProject({
         id: request.id,
@@ -79,11 +80,40 @@ export class ProjectController implements ProjectServiceController {
       })
       .then((project) => {
         return {
-          id: Number(project.id),
+          id: project.id.toString(),
           name: project.name,
           environment: project.environment,
           description: project.description,
         };
       });
+  }
+
+  @GrpcMethod(PROJECT_SERVICE_NAME, 'deleteProject')
+  async deleteProject(request: DeleteProjectRequest): Promise<VoidResponse> {
+    try {
+      await this.projectService.deleteProject(request.id);
+      return {
+        ok: true,
+        error: '',
+      };
+    } catch (error) {
+      this.logger.error(error);
+      return {
+        ok: false,
+        error: error.message,
+      };
+    }
+  }
+
+  @GrpcMethod(PROJECT_SERVICE_NAME, 'findProject')
+  async findProject(request: FindProjectRequest): Promise<Project> {
+    return this.projectService.findProject(request.id).then((project) => {
+      return {
+        id: project.id.toString(),
+        name: project.name,
+        environment: project.environment,
+        description: project.description,
+      };
+    });
   }
 }

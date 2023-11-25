@@ -1,11 +1,12 @@
 import { USER_SERVICE_NAME, UserServiceClient } from '@coblocks/proto';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Role, hashPassword } from '@coblocks/common';
 import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
   private userClient: UserServiceClient;
 
   constructor(@Inject('user') private client: ClientGrpc) {}
