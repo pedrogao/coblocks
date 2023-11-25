@@ -1,10 +1,6 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
-import {
-  Project,
-  ProjectServiceClient,
-  PROJECT_SERVICE_NAME,
-} from '@coblocks/proto';
+import { Project, ProjectServiceClient, PROJECT_SERVICE_NAME } from '@coblocks/proto';
 
 @Injectable()
 export class AppService implements OnModuleInit {
@@ -16,10 +12,11 @@ export class AppService implements OnModuleInit {
     this.projectService = this.client.getService<ProjectServiceClient>(PROJECT_SERVICE_NAME);
   }
 
-  async getProjectList(creatorId: number): Promise<Project[]> {
+  async getProjectList(creatorId: string): Promise<Project[]> {
+    // TODO: add pagination
     return this.projectService
-      .findProjectList({ creatorId })
+      .findProjectList({ creatorId, limit: 10, offset: 0 })
       .toPromise()
-      .then((res) => res.projects);
+      .then((res) => res.data);
   }
 }

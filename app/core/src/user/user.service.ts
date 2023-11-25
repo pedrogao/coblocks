@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from '../dao/prisma.service';
-import { hashPassword } from '@coblocks/common';
 
 @Injectable()
 export class UserService {
@@ -24,25 +23,23 @@ export class UserService {
     password: string;
     role: number;
   }): Promise<User> {
-    const hashedPassword = await hashPassword(password);
     return this.prismaService.user.create({
       data: {
         name,
-        password: hashedPassword,
+        password,
         role,
       },
     });
   }
 
   async updateUserPassword({ name, password }: { name: string; password: string }) {
-    const hashedPassword = await hashPassword(password);
     return this.prismaService.user.update({
       // @ts-ignore
       where: {
         name,
       },
       data: {
-        password: hashedPassword,
+        password,
       },
     });
   }

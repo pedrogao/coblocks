@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  Request,
+  Req,
+} from '@nestjs/common';
 import { Request as RawRequest } from 'express';
 import { RoomService } from './room.service';
 import { CreateRoomDto } from './dto/create-room.dto';
@@ -10,8 +21,9 @@ export class RoomController {
   constructor(private readonly roomService: RoomService) {}
 
   @Post()
-  async create(@Body() createRoomDto: CreateRoomDto) {
-    return this.roomService.create(createRoomDto);
+  async create(@Body() createRoomDto: CreateRoomDto, @Req() req: RawRequest & { user: any }) {
+    const createId = req.user.id;
+    return this.roomService.create(createRoomDto, createId);
   }
 
   @Get()
@@ -22,16 +34,16 @@ export class RoomController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return this.roomService.findOne(+id);
+    return this.roomService.findOne(id);
   }
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateRoomDto: UpdateRoomDto) {
-    return this.roomService.update(+id, updateRoomDto);
+    return this.roomService.update(id, updateRoomDto);
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    return this.roomService.remove(+id);
+    return this.roomService.remove(id);
   }
 }

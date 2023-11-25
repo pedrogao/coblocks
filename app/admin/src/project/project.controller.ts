@@ -22,9 +22,12 @@ export class ProjectController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return this.projectService.findOne(+id);
+    return this.projectService.findOne(id);
   }
 
+  /**
+   * @see https://stackoverflow.com/questions/28459418/use-of-put-vs-patch-methods-in-rest-api-real-life-scenarios
+   */
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) {
     return this.projectService.update(id, updateProjectDto);
@@ -32,6 +35,6 @@ export class ProjectController {
 
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    return this.projectService.remove(+id);
+    return this.projectService.remove(id);
   }
 }

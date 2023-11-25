@@ -134,6 +134,7 @@
       "id": "Id",
       "name": "名称",
       "projectId": "项目Id",
+      "projectName": "项目名称",
       "status": "状态"
     },
     "titles": {

@@ -166,6 +166,7 @@
       "id": "Id",
       "name": "Name",
       "projectId": "ProjectId",
+      "projectName": "ProjectName",
       "status": "Status"
     },
     "titles": {

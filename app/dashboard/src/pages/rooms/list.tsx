@@ -58,7 +58,7 @@ export const RoomList: React.FC<IResourceComponentsProps> = () => {
         enableColumnFilter: false,
         enableSorting: false,
         cell: function render({ getValue }) {
-          return <span>{getValue() === 1 ? "Active" : "Inactive"}</span>;
+          return <span>{getValue() as string}</span>;
         },
       },
       {

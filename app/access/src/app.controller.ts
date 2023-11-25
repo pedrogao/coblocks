@@ -12,7 +12,7 @@ export class AppController {
   }
 
   @Get('/project/:creatorId')
-  async getProjectList(@Param('creatorId') creatorId: number): Promise<Project[]> {
+  async getProjectList(@Param('creatorId') creatorId: string): Promise<Project[]> {
     return this.appService.getProjectList(creatorId);
   }
 }

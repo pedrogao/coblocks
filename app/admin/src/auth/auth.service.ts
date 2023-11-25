@@ -24,7 +24,6 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException("User doesn't exist");
     }
-
     const ok = await verifyPassword(password, user.password);
     if (!ok) {
       throw new UnauthorizedException('Invalid password');

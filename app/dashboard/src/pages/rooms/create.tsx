@@ -14,7 +14,25 @@ export const RoomCreate: React.FC<IResourceComponentsProps> = () => {
 
   const { options: projectOptions } = useSelect({
     resource: "projects",
+    optionLabel: "name",
+    optionValue: "id",
+    pagination: {
+      current: 1,
+      pageSize: 10,
+      mode: "server",
+    },
   });
+
+  const statusOptions = [
+    {
+      label: "Opened",
+      value: "Opened",
+    },
+    {
+      label: "Closed",
+      value: "Closed",
+    },
+  ];
 
   return (
     <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
@@ -29,7 +47,7 @@ export const RoomCreate: React.FC<IResourceComponentsProps> = () => {
         <FormErrorMessage>{(errors as any)?.name?.message as string}</FormErrorMessage>
       </FormControl>
       <FormControl mb="3" isInvalid={!!errors?.projectId}>
-        <FormLabel>{translate("rooms.fields.projectId")}</FormLabel>
+        <FormLabel>{translate("rooms.fields.projectName")}</FormLabel>
         <Select
           placeholder="Select project"
           {...register("projectId", {
@@ -46,13 +64,18 @@ export const RoomCreate: React.FC<IResourceComponentsProps> = () => {
       </FormControl>
       <FormControl mb="3" isInvalid={!!(errors as any)?.status}>
         <FormLabel>{translate("rooms.fields.status")}</FormLabel>
-        <Input
-          type="number"
+        <Select
+          placeholder="Select status"
           {...register("status", {
             required: "This field is required",
-            valueAsNumber: true,
           })}
-        />
+        >
+          {statusOptions.map((option) => (
+            <option value={option.value} key={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </Select>
         <FormErrorMessage>{(errors as any)?.status?.message as string}</FormErrorMessage>
       </FormControl>
     </Create>
