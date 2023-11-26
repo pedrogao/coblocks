@@ -34,10 +34,7 @@ export class ProjectController implements ProjectServiceController {
     });
 
     return {
-      // count: request.limit,
-      // page: Math.ceil(request.offset / request.limit) + 1,
       total,
-      // pageCount: Math.ceil(total / request.limit),
       data:
         projects.map((project) => {
           return {

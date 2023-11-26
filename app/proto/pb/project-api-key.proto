@@ -33,13 +33,13 @@ message CreateProjectAPIKeyRequest {
 }
 
 message FindProjectAPIKeyListRequest {
-  string project_id = 1;
+  string s = 1;
   int32 limit = 2;
   int32 offset = 3;
 }
 
 message FindProjectAPIKeyListResponse {
-  repeated ProjectAPIKey project_api_keys = 1;
+  repeated ProjectAPIKey data = 1;
   int32 total = 2;
 }
 

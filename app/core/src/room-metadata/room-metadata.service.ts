@@ -33,8 +33,7 @@ export class RoomMetadataService {
   }
 
   async getRoomMetadata(request: GetRoomMetadataRequest) {
-    return await this.prismaService.roomMetadata.findUnique({
-      // @ts-ignore
+    return await this.prismaService.roomMetadata.findFirst({
       where: {
         room_id: BigInt(request.roomId),
       },

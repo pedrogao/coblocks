@@ -33,9 +33,11 @@
     "@nestjs/platform-express": "^10.0.0",
     "class-transformer": "^0.3.1",
     "class-validator": "^0.14.0",
+    "js-base64": "^3.7.5",
     "js-yaml": "^4.1.0",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "yjs": "^13.6.10"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
