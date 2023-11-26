@@ -24,6 +24,12 @@ import { Login } from "./pages/login";
 import { Register } from "./pages/register";
 import { ProjectList, ProjectCreate, ProjectEdit, ProjectShow } from "./pages/projects";
 import { RoomList, RoomCreate, RoomEdit, RoomShow } from "./pages/rooms";
+import {
+  ProjectApiKeyList,
+  ProjectApiKeyCreate,
+  ProjectApiKeyEdit,
+  ProjectApiKeyShow,
+} from "./pages/projectapikeys";
 import { API_URL } from "./api/axios";
 
 function App() {
@@ -70,6 +76,16 @@ function App() {
                   // parent: "projects",
                 },
               },
+              {
+                name: "project-api-keys",
+                list: "/project-api-keys",
+                create: "/project-api-keys/create",
+                edit: "/project-api-keys/edit/:id",
+                show: "/project-api-keys/show/:id",
+                meta: {
+                  canDelete: true,
+                },
+              },
             ]}
             options={{
               syncWithLocation: true,
@@ -105,6 +121,13 @@ function App() {
                   <Route path="create" element={<RoomCreate />} />
                   <Route path="edit/:id" element={<RoomEdit />} />
                   <Route path="show/:id" element={<RoomShow />} />
+                </Route>
+
+                <Route path="/project-api-keys">
+                  <Route index element={<ProjectApiKeyList />} />
+                  <Route path="create" element={<ProjectApiKeyCreate />} />
+                  <Route path="edit/:id" element={<ProjectApiKeyEdit />} />
+                  <Route path="show/:id" element={<ProjectApiKeyShow />} />
                 </Route>
 
                 <Route path="*" element={<ErrorComponent />} />

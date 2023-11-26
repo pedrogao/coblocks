@@ -6,6 +6,7 @@ import { LoggerMiddleware } from './logger/logger.middleware';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { RoomModule } from './room/room.module';
+import { ProjectApikeyModule } from './project-apikey/project-apikey.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -17,6 +18,7 @@ import configuration from './config/configuration';
     AuthModule,
     UserModule,
     RoomModule,
+    ProjectApikeyModule,
   ],
   controllers: [AppController],
   providers: [],

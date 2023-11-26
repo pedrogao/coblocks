@@ -6,19 +6,24 @@ import {
 } from '@coblocks/proto';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../dao/prisma.service';
+import { convertQuery } from '../query';
+import { DeleteStatus } from '@coblocks/common';
 
 @Injectable()
 export class ProjectApikeyService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async findProjectApiKeyList(req: FindProjectAPIKeyListRequest) {
-    const { projectId, limit, offset } = req;
+    const { s, limit, offset } = req;
     const prisma = this.prismaService;
+    const filters = s ? JSON.parse(s) : {};
+    const query = convertQuery(filters);
 
     const [data, total] = await prisma.$transaction([
       prisma.projectAPIKey.findMany({
         where: {
-          project_id: BigInt(projectId),
+          ...query,
+          delete_status: DeleteStatus.Normal,
         },
         take: limit,
         skip: offset,
@@ -36,6 +41,7 @@ export class ProjectApikeyService {
     return this.prismaService.projectAPIKey.update({
       where: {
         id: BigInt(req.id),
+        delete_status: DeleteStatus.Normal,
       },
       data: {
         permission: req.permission,
@@ -45,9 +51,14 @@ export class ProjectApikeyService {
   }
 
   async deleteProjectAPIKey(req: DeleteProjectAPIKeyRequest) {
-    return this.prismaService.projectAPIKey.delete({
+    return this.prismaService.projectAPIKey.update({
       where: {
         id: BigInt(req.id),
+        delete_status: DeleteStatus.Normal,
+      },
+      data: {
+        delete_status: DeleteStatus.Deleted,
+        delete_time: new Date(),
       },
     });
   }
@@ -56,6 +67,7 @@ export class ProjectApikeyService {
     return this.prismaService.projectAPIKey.create({
       data: {
         project_id: BigInt(req.projectId),
+        api_key: req.apiKey,
         permission: req.permission,
         room_list: req.roomList,
         creator_id: BigInt(req.creatorId),

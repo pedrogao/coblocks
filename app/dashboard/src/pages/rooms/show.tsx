@@ -1,6 +1,6 @@
 import { useShow, IResourceComponentsProps, useTranslate } from "@refinedev/core";
 import { Show, TagField, TextField, NumberField } from "@refinedev/chakra-ui";
-import { Heading, HStack } from "@chakra-ui/react";
+import { Heading, HStack, Code } from "@chakra-ui/react";
 
 export const RoomShow: React.FC<IResourceComponentsProps> = () => {
   const translate = useTranslate();
@@ -27,6 +27,16 @@ export const RoomShow: React.FC<IResourceComponentsProps> = () => {
         {translate("rooms.fields.status")}
       </Heading>
       <TextField value={record?.["status"]} />
+
+      <Heading as="h5" size="sm" mt={4}>
+        {translate("rooms.fields.doc")}
+      </Heading>
+      <TextField value={record?.["doc"]} />
+      <Heading as="h5" size="sm" mt={4}>
+        {translate("rooms.fields.metadata")}
+      </Heading>
+      {/* <TextField value={record?.["metadata"]} /> */}
+      <Code>{JSON.stringify(record?.["metadata"], null, 2)}</Code>
     </Show>
   );
 };

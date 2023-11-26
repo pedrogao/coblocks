@@ -23,13 +23,13 @@ export interface CreateProjectAPIKeyRequest {
 }
 
 export interface FindProjectAPIKeyListRequest {
-  projectId: string;
+  s: string;
   limit: number;
   offset: number;
 }
 
 export interface FindProjectAPIKeyListResponse {
-  projectApiKeys: ProjectAPIKey[];
+  data: ProjectAPIKey[];
   total: number;
 }
 

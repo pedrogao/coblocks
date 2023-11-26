@@ -72,7 +72,7 @@ export class ProjectApikeyController implements ProjectAPIKeyServiceController {
   ): Promise<FindProjectAPIKeyListResponse> {
     const { data, total } = await this.projectApikeyService.findProjectApiKeyList(req);
     return {
-      projectApiKeys: data.map((projectApiKey) => {
+      data: data.map((projectApiKey) => {
         return {
           id: projectApiKey.id.toString(),
           projectId: projectApiKey.project_id.toString(),

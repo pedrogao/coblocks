@@ -135,13 +135,35 @@
       "name": "名称",
       "projectId": "项目Id",
       "projectName": "项目名称",
-      "status": "状态"
+      "status": "状态",
+      "doc": "文档数据",
+      "metadata": "元数据"
     },
     "titles": {
       "create": "新建房间",
       "edit": "编辑房间",
       "list": "房间列表",
       "show": "房间详情"
+    }
+  },
+  "project-api-keys": {
+    "project-api-keys": "API Keys",
+    "fields": {
+      "id": "Id",
+      "permission": "权限",
+      "projectId": "项目Id",
+      "projectName": "项目名称",
+      "apiKey": "api key",
+      "roomList": "房间列表",
+      "status": "状态",
+      "createdTime": "创建时间",
+      "updatedTime": "更新时间"
+    },
+    "titles": {
+      "create": "新建API Key",
+      "edit": "编辑API Key",
+      "list": "API Key列表",
+      "show": "API Key详情"
     }
   },
   "documentTitle": {

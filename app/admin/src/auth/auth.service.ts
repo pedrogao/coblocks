@@ -34,4 +34,9 @@ export class AuthService {
       accessToken: await this.jwtService.signAsync(payload),
     };
   }
+
+  public async generateAPIKey(creatorId: string, projectId: string): Promise<string> {
+    const payload = { creatorId, projectId };
+    return await this.jwtService.signAsync(payload);
+  }
 }
