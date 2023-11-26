@@ -20,19 +20,24 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@coblocks/common": "workspace:*",
+    "@coblocks/proto": "workspace:*",
     "@grpc/grpc-js": "^1.9.11",
     "@grpc/proto-loader": "^0.7.10",
+    "@hocuspocus/extension-logger": "workspace:*",
+    "@hocuspocus/extension-sqlite": "workspace:*",
+    "@hocuspocus/server": "workspace:*",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.0.0",
+    "@nestjs/mapped-types": "*",
     "@nestjs/microservices": "^10.2.9",
     "@nestjs/platform-express": "^10.0.0",
-    "@nestjs/mapped-types": "*",
+    "@nestjs/websockets": "^10.2.10",
     "js-yaml": "^4.1.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "@coblocks/proto": "workspace:*",
-    "@coblocks/common": "workspace:*"
+    "ws": "^8.14.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
@@ -43,6 +48,7 @@
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.3.1",
     "@types/supertest": "^2.0.12",
+    "@types/ws": "^8.5.3",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.42.0",
