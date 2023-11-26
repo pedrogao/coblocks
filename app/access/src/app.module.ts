@@ -3,8 +3,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { DocModule } from './doc/doc.module';
+import { DocGateway } from './doc/doc.gateway';
 import configuration from './config/configuration';
 
 @Module({
@@ -23,10 +22,8 @@ import configuration from './config/configuration';
         },
       },
     ]),
-
-    DocModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [DocGateway],
 })
 export class AppModule {}
