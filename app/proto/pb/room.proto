@@ -7,6 +7,7 @@ import "common.proto";
 service RoomService {
   rpc FindRoomList(FindRoomListRequest) returns (FindRoomListResponse) {}
   rpc FindRoom(FindRoomRequest) returns (Room) {}
+  rpc FindRoomByName(FindRoomByNameRequest) returns (Room) {}
   rpc CreateRoom(CreateRoomRequest) returns (Room) {}
   rpc UpdateRoom(UpdateRoomRequest) returns (Room) {}
   rpc DeleteRoom(DeleteRoomRequest) returns (common.VoidResponse) {}
@@ -15,6 +16,8 @@ service RoomService {
 message DeleteRoomRequest { string id = 1; }
 
 message FindRoomRequest { string id = 1; }
+
+message FindRoomByNameRequest { string name = 1; }
 
 message UpdateRoomRequest {
   string id = 1;

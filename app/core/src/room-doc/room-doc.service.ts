@@ -8,15 +8,24 @@ export class RoomDocService {
 
   async updateRoomDoc(request: UpdateRoomDocRequest) {
     const { doc, roomId } = request;
-    return this.prismaService.roomDoc.update({
-      // @ts-ignore
-      where: {
-        room_id: BigInt(roomId),
-      },
-      data: {
-        doc,
-      },
-    });
+    const prisma = this.prismaService;
+
+    const [_, roomDoc] = await prisma.$transaction([
+      prisma.roomDoc.updateMany({
+        where: {
+          room_id: BigInt(roomId),
+        },
+        data: {
+          doc,
+        },
+      }),
+      prisma.roomDoc.findFirst({
+        where: {
+          room_id: BigInt(roomId),
+        },
+      }),
+    ]);
+    return roomDoc;
   }
 
   async getRoomDoc(request: GetRoomDocRequest) {

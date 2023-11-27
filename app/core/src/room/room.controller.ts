@@ -12,6 +12,7 @@ import {
   DeleteRoomRequest,
   FindRoomRequest,
   VoidResponse,
+  FindRoomByNameRequest,
 } from '@coblocks/proto';
 import { RoomService } from './room.service';
 import { RoomStatus } from '@coblocks/common';
@@ -26,6 +27,18 @@ export class RoomController implements RoomServiceController {
   @GrpcMethod(ROOM_SERVICE_NAME, 'findRoom')
   async findRoom(request: FindRoomRequest): Promise<Room> {
     const room = await this.roomService.findRoom(request.id);
+
+    return {
+      id: room.id.toString(),
+      name: room.name,
+      projectId: room.project_id.toString(),
+      creatorId: room.creator_id.toString(),
+      status: room.status ? RoomStatus.Opened : RoomStatus.Closed,
+    };
+  }
+
+  async findRoomByName(request: FindRoomByNameRequest): Promise<Room> {
+    const room = await this.roomService.findRoomByName(request.name);
 
     return {
       id: room.id.toString(),

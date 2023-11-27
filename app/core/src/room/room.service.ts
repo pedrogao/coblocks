@@ -95,4 +95,13 @@ export class RoomService {
       },
     });
   }
+
+  async findRoomByName(name: string) {
+    return this.prismaService.room.findFirst({
+      where: {
+        name,
+        delete_status: DeleteStatus.Normal,
+      },
+    });
+  }
 }

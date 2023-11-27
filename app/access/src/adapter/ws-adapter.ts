@@ -1,4 +1,4 @@
-import { INestApplicationContext, Logger } from '@nestjs/common';
+import { INestApplication, Logger } from '@nestjs/common';
 import { loadPackage } from '@nestjs/common/utils/load-package.util';
 import { normalizePath, isNil } from '@nestjs/common/utils/shared.utils';
 import { AbstractWsAdapter } from '@nestjs/websockets';
@@ -7,10 +7,11 @@ import { MessageMappingProperties } from '@nestjs/websockets/gateway-metadata-ex
 import * as http from 'http';
 import { EMPTY, fromEvent, Observable } from 'rxjs';
 import { filter, first, mergeMap, share, takeUntil } from 'rxjs/operators';
-import { Logger as ServerLogger } from '@hocuspocus/extension-logger';
-import { SQLite } from '@hocuspocus/extension-sqlite';
-import { Server } from '@hocuspocus/server';
+// import { SQLite } from '@hocuspocus/extension-sqlite';
+import { Server, Hocuspocus } from '@hocuspocus/server';
 import { Server as WebSocketServer } from 'ws';
+import { Storage } from '../extensions/storage';
+import { Logger as ServerLogger } from '../extensions/logger';
 
 let wsPackage: any = {};
 
@@ -28,10 +29,6 @@ type WsServerRegistryEntry = any[];
 
 const UNDERLYING_HTTP_SERVER_PORT = 0;
 
-const hocuspocusServer = Server.configure({
-  extensions: [new ServerLogger(), new SQLite()],
-});
-
 export class WsAdapter extends AbstractWsAdapter {
   protected readonly logger = new Logger(WsAdapter.name);
   protected readonly httpServersRegistry = new Map<
@@ -40,9 +37,17 @@ export class WsAdapter extends AbstractWsAdapter {
   >();
   protected readonly wsServersRegistry = new Map<WsServerRegistryKey, WsServerRegistryEntry>();
 
-  constructor(appOrHttpServer?: INestApplicationContext | any) {
+  private hocuspocusServer: Hocuspocus;
+
+  constructor(appOrHttpServer: INestApplication) {
     super(appOrHttpServer);
     wsPackage = loadPackage('ws', 'WsAdapter', () => require('ws'));
+
+    const storage = appOrHttpServer.get(Storage);
+
+    this.hocuspocusServer = Server.configure({
+      extensions: [new ServerLogger(), storage],
+    });
   }
 
   public create(
@@ -152,7 +157,7 @@ export class WsAdapter extends AbstractWsAdapter {
     server.on(CONNECTION_EVENT, (ws: any, request: any) => {
       ws.on(ERROR_EVENT, (err: any) => this.logger.error(err));
       // handle connections
-      hocuspocusServer.handleConnection(ws, request);
+      this.hocuspocusServer.handleConnection(ws, request);
     });
     server.on(ERROR_EVENT, (err: any) => this.logger.error(err));
     return server;

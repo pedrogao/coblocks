@@ -6,6 +6,6 @@ export class AppController {
 
   @Get(['', '/'])
   index(): string {
-    return 'Hello World!';
+    return 'Coblocks Access Service';
   }
 }
