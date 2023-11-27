@@ -1,0 +1,13 @@
+Dockerfile
+.dockerignore
+node_modules
+*.log
+dist
+test
+.env*
+./docs
+./.git
+./.github
+./playground
+./.vscode
+./tests

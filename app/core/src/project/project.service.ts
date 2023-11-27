@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Project } from '@prisma/client';
-import { PrismaService } from '../dao/prisma.service';
 import { DeleteStatus } from '@coblocks/common';
+import { Project } from '../generated/client';
+import { PrismaService } from '../dao/prisma.service';
 
 interface FindProjectListParams {
   creatorId: number;

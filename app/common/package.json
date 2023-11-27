@@ -27,8 +27,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@jest/globals": "^29.7.0",
-    "argon2": "^0.31.2"
+    "@jest/globals": "^29.7.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.8",
