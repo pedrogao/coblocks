@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Room } from '@prisma/client';
-import { PrismaService } from '../dao/prisma.service';
-import { FindRoomListRequest } from '@coblocks/proto';
 import { DeleteStatus } from '@coblocks/common';
+import { FindRoomListRequest } from '@coblocks/proto';
+import { PrismaService } from '../dao/prisma.service';
 import { convertQuery } from '../query';
+import { Room } from '../generated/client';
 
 @Injectable()
 export class RoomService {

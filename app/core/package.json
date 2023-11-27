@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "setup": "ts-node ./src/setup.ts",
-    "build": "nest build",
+    "build": "nest build && cp -R ./src/generated ./dist/generated",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

@@ -49,6 +49,9 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^5.57.0
         version: 5.57.0(eslint@8.45.0)(typescript@5.1.3)
+      acorn-import-assertions:
+        specifier: ^1.9.0
+        version: 1.9.0(acorn@8.11.2)
       ava:
         specifier: ^4.3.3
         version: 4.3.3(@ava/typescript@3.0.1)
@@ -369,9 +372,6 @@ importers:
       '@jest/globals':
         specifier: ^29.7.0
         version: 29.7.0
-      argon2:
-        specifier: ^0.31.2
-        version: 0.31.2
     devDependencies:
       '@types/jest':
         specifier: ^29.5.8
@@ -3270,7 +3270,7 @@ packages:
       '@emotion/react': '>=10.0.35'
       react: '>=18'
     dependencies:
-      '@emotion/react': 11.11.1(@types/react@18.2.38)(react@18.2.0)
+      '@emotion/react': 11.11.1(@types/react@18.2.37)(react@18.2.0)
       react: 18.2.0
     dev: false
 
@@ -3636,8 +3636,8 @@ packages:
       '@chakra-ui/react-env': 3.1.0(react@18.2.0)
       '@chakra-ui/system': 2.6.2(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(react@18.2.0)
       '@chakra-ui/utils': 2.0.15
-      '@emotion/react': 11.11.1(@types/react@18.2.38)(react@18.2.0)
-      '@emotion/styled': 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.38)(react@18.2.0)
+      '@emotion/react': 11.11.1(@types/react@18.2.37)(react@18.2.0)
+      '@emotion/styled': 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.37)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
@@ -4126,8 +4126,8 @@ packages:
       '@chakra-ui/styled-system': 2.9.2
       '@chakra-ui/theme-utils': 2.0.21
       '@chakra-ui/utils': 2.0.15
-      '@emotion/react': 11.11.1(@types/react@18.2.38)(react@18.2.0)
-      '@emotion/styled': 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.38)(react@18.2.0)
+      '@emotion/react': 11.11.1(@types/react@18.2.37)(react@18.2.0)
+      '@emotion/styled': 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.37)(react@18.2.0)
       react: 18.2.0
       react-fast-compare: 3.2.2
     dev: false
@@ -6397,11 +6397,6 @@ packages:
       node-addon-api: 3.2.1
       node-gyp-build: 4.7.0
     dev: true
-
-  /@phc/format@1.0.0:
-    resolution: {integrity: sha512-m7X9U6BG2+J+R1lSOdCiITLLrxm+cWlNI3HUFA92oLO77ObGNzaKdh8pMLqdZcshtkKuV84olNNXDfMc4FezBQ==}
-    engines: {node: '>=10'}
-    dev: false
 
   /@pkgjs/parseargs@0.11.0:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -9339,19 +9334,6 @@ packages:
   /arg@4.1.3:
     resolution: {integrity: sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==}
     dev: true
-
-  /argon2@0.31.2:
-    resolution: {integrity: sha512-QSnJ8By5Mth60IEte45w9Y7v6bWcQw3YhRtJKKN8oNCxnTLDiv/AXXkDPf2srTMfxFVn3QJdVv2nhXESsUa+Yg==}
-    engines: {node: '>=14.0.0'}
-    requiresBuild: true
-    dependencies:
-      '@mapbox/node-pre-gyp': 1.0.11
-      '@phc/format': 1.0.0
-      node-addon-api: 7.0.0
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-    dev: false
 
   /argparse@1.0.10:
     resolution: {integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==}
@@ -16335,10 +16317,6 @@ packages:
 
   /node-addon-api@4.3.0:
     resolution: {integrity: sha512-73sE9+3UaLYYFmDsFZnqCInzPyh3MqIwZO9cw58yIqAZhONrrabrYyYe3TuIqtIiOuTXVhsGau8hcrhhwSsDIQ==}
-    dev: false
-
-  /node-addon-api@7.0.0:
-    resolution: {integrity: sha512-vgbBJTS4m5/KkE16t5Ly0WW9hz46swAstv0hYYwMtbG7AznRhNyfLRe8HZAiWIpcHzoO7HxhLuBQj9rJ/Ho0ZA==}
     dev: false
 
   /node-dir@0.1.17:

@@ -4,7 +4,8 @@
 - [x] Playground for `Blocks`;
 - [ ] Add Saas for `Blocks`;
   - [x] Introduce Admin dashboard;
-  - [ ] Room, User, Permission services etc;
+  - [x] Room, User, Permission services etc;
+  - [ ] Atomic & transactional operations;
 - [ ] Make `y.Doc` more useful;
 - [ ] Introduce `FSM` to increase rubostness of the connection;
 - [ ] Add `Counter` for `Y.Doc`;

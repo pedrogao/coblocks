@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
 import { Environment, Role, hashPassword } from '@coblocks/common';
+import { PrismaClient } from './generated/client';
 
 const prisma = new PrismaClient();
 
