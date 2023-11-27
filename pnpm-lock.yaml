@@ -118,6 +118,9 @@ importers:
       '@grpc/proto-loader':
         specifier: ^0.7.10
         version: 0.7.10
+      '@hocuspocus/extension-database':
+        specifier: workspace:*
+        version: link:../../packages/extension-database
       '@hocuspocus/extension-logger':
         specifier: workspace:*
         version: link:../../packages/extension-logger
@@ -148,6 +151,12 @@ importers:
       '@nestjs/websockets':
         specifier: ^10.2.10
         version: 10.2.10(@nestjs/common@10.0.0)(@nestjs/core@10.0.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      axios:
+        specifier: ^1.6.2
+        version: 1.6.2
+      js-base64:
+        specifier: ^3.7.5
+        version: 3.7.5
       js-yaml:
         specifier: ^4.1.0
         version: 4.1.0

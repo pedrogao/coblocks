@@ -12,6 +12,10 @@ export interface FindRoomRequest {
   id: string;
 }
 
+export interface FindRoomByNameRequest {
+  name: string;
+}
+
 export interface UpdateRoomRequest {
   id: string;
   status: number;
@@ -50,6 +54,8 @@ export interface RoomServiceClient {
 
   findRoom(request: FindRoomRequest, metadata?: Metadata): Observable<Room>;
 
+  findRoomByName(request: FindRoomByNameRequest, metadata?: Metadata): Observable<Room>;
+
   createRoom(request: CreateRoomRequest, metadata?: Metadata): Observable<Room>;
 
   updateRoom(request: UpdateRoomRequest, metadata?: Metadata): Observable<Room>;
@@ -65,6 +71,8 @@ export interface RoomServiceController {
 
   findRoom(request: FindRoomRequest, metadata?: Metadata): Promise<Room> | Observable<Room> | Room;
 
+  findRoomByName(request: FindRoomByNameRequest, metadata?: Metadata): Promise<Room> | Observable<Room> | Room;
+
   createRoom(request: CreateRoomRequest, metadata?: Metadata): Promise<Room> | Observable<Room> | Room;
 
   updateRoom(request: UpdateRoomRequest, metadata?: Metadata): Promise<Room> | Observable<Room> | Room;
@@ -77,7 +85,14 @@ export interface RoomServiceController {
 
 export function RoomServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["findRoomList", "findRoom", "createRoom", "updateRoom", "deleteRoom"];
+    const grpcMethods: string[] = [
+      "findRoomList",
+      "findRoom",
+      "findRoomByName",
+      "createRoom",
+      "updateRoom",
+      "deleteRoom",
+    ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("RoomService", method)(constructor.prototype[method], method, descriptor);

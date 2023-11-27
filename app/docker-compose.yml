@@ -16,9 +16,20 @@ services:
     volumes:
       - ./coblocks.sql:/docker-entrypoint-initdb.d/coblocks.sql
 
-  # coblocks-core:
+  # caddy:
+  #   image: caddy:2
+  #   ports:
+  #     - 3000:80
+  #     - 1443:443
+  #   environment:
+  #     - reverse_proxy_from=my-app:3000
+  #     - reverse_proxy_to=my-domain.com
+  #   volumes:
+  #     - caddy:/data
+
+  # coblocks-access:
   #   build:
-  #     context: ./core
+  #     context: ./access
   #     dockerfile: Dockerfile
   #   ports:
   #     - "5000:5000"

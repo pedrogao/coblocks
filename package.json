@@ -39,7 +39,7 @@
     "playground:slow": "concurrently --kill-others \"npm --prefix ./playground/examples run dev\" \"npm --prefix ./playground/backend run dev src/slow.ts\"",
     "playground:redis": "concurrently --kill-others \"npm --prefix ./playground/examples run dev\" \"npm --prefix ./playground/backend run dev src/redis.ts\"",
     "playground:webhook": "concurrently --kill-others \"npm --prefix ./playground/examples run dev\" \"npm --prefix ./playground/backend run dev src/webhook.ts\"",
-    "app:start": "concurrently --kill-others \"npm --prefix ./app/core run start:dev\" \"npm --prefix ./app/admin run start:dev\"",
+    "app:start": "concurrently --kill-others \"npm --prefix ./app/core run start:dev\" \"npm --prefix ./app/admin run start:dev\" \"npm --prefix ./app/access run start:dev\"",
     "app:prebuild": "npm run clean:app && rollup -c ./app/rollup.config.js",
     "app:build": "concurrently --kill-others \"npm --prefix ./app/core run build\" \"npm --prefix ./app/access run build\"",
     "clean:app": "rm -Rf ./app/*/dist",
