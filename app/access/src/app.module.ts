@@ -19,6 +19,7 @@ import { Storage } from './extensions/storage';
         name: 'room',
         transport: Transport.GRPC,
         options: {
+          url: process.env.GRPC_URL || 'localhost:5000',
           package: ['room', 'room_doc', 'room_hook', 'room_metadata'],
           protoPath: [
             join(__dirname, 'pb/room.proto'),

@@ -14,6 +14,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: "123456"
       MYSQL_DATABASE: "coblocks"
+    networks:
+      - coblocks
     volumes:
       - ./app/coblocks.sql:/docker-entrypoint-initdb.d/coblocks.sql
 
@@ -32,16 +34,18 @@ services:
   #   build:
   #     context: ./
   #     dockerfile: Dockerfile
-  #     args:
-  #       - target=access
+  #     target: access
   #   ports:
   #     - "5000:5000"
   #   depends_on:
-  #     - mysql
+  #     - coblocks-core
   #   environment:
   #     DATABASE_URL: mysql://root:123456@mysql:3306/coblocks
   #     NODE_ENV: development
-  #     PORT: 3000
+  #   volumes:
+  #     - ./app/proto/pb:/prod/access/dist/pb
+  #   networks:
+  #     - coblocks
 
   coblocks-core:
     build:
@@ -54,9 +58,14 @@ services:
       - coblocks
     depends_on:
       - mysql
+    restart: always
     environment:
       DATABASE_URL: mysql://root:123456@mysql:3306/coblocks
       NODE_ENV: development
+    volumes:
+      - ./wait-for-it.sh:/prod/core/wait-for-it.sh
+      - ./app/proto/pb:/prod/core/dist/pb
+    command: sh -c './wait-for-it.sh -t 30 mysql:3306 -- node dist/main.js'
 
   coblocks-admin:
     build:
@@ -65,8 +74,17 @@ services:
       target: admin
     ports:
       - "3000:3000"
+    environment:
+      NODE_ENV: development
+      GRPC_URL: coblocks-core:5000
+    volumes:
+      - ./wait-for-it.sh:/prod/admin/wait-for-it.sh
+      - ./app/proto/pb:/prod/admin/dist/pb
     networks:
       - coblocks
+    depends_on:
+      - coblocks-core
+    command: sh -c './wait-for-it.sh -t 30 coblocks-core:5000 -- node dist/main.js'
 
   coblocks-dashboard:
     build:

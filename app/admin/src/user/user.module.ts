@@ -11,6 +11,7 @@ import { UserController } from './user.controller';
         name: 'user',
         transport: Transport.GRPC,
         options: {
+          url: process.env.GRPC_URL || 'localhost:5000',
           package: ['user'],
           protoPath: [join(__dirname, '../', 'pb/user.proto')],
         },

@@ -11,6 +11,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         name: 'room',
         transport: Transport.GRPC,
         options: {
+          url: process.env.GRPC_URL || 'localhost:5000',
           package: ['common', 'room', 'room_doc', 'room_hook', 'room_metadata'],
           protoPath: [
             join(__dirname, '../', 'pb/common.proto'),

@@ -3,7 +3,7 @@
 
 FROM node:20-alpine AS base
 
-# RUN apk add g++ make py3-pip git
+RUN apk add g++ make py3-pip git
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -37,35 +37,32 @@ RUN pnpm --prefix ./app/dashboard run build
 
 # deploy
 RUN pnpm deploy --filter=./app/core --prod /prod/core
-RUN cp -R ./app/proto/pb /prod/core/dist/proto
-RUN ls -al /prod/core/dist/proto
-
 RUN pnpm deploy --filter=./app/admin --prod /prod/admin
-RUN cp -R ./app/proto/pb /prod/admin/dist/proto
-
 RUN pnpm deploy --filter=./app/access --prod /prod/access
-RUN cp -R ./app/proto/pb /prod/access/dist/proto
-
 RUN pnpm deploy --filter=./app/dashboard --prod /prod/dashboard
+
+# deploy
+
+FROM node:20-alpine as deploy
+RUN apk add openssl bash
 
 # targets
 # core
-FROM node:20-alpine as core
+FROM deploy as core
 COPY --from=build /prod/core /prod/core
-RUN apk add openssl
 WORKDIR /prod/core
 EXPOSE 5000
 CMD ["node", "dist/main.js"]
 
 # access
-FROM node:20-alpine as access
+FROM deploy as access
 COPY --from=build /prod/access /prod/access
 WORKDIR /prod/access
 EXPOSE 1234
 CMD ["node", "dist/main.js"]
 
 # admin
-FROM node:20-alpine as admin
+FROM deploy as admin
 COPY --from=build /prod/admin /prod/admin
 WORKDIR /prod/admin
 EXPOSE 3000
