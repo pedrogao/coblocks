@@ -12,6 +12,7 @@ import { AuthModule } from '../auth/auth.module';
         name: 'project-api-key',
         transport: Transport.GRPC,
         options: {
+          url: process.env.GRPC_URL || 'localhost:5000',
           package: ['common', 'project_api_key'],
           protoPath: [
             join(__dirname, '../', 'pb/common.proto'),
