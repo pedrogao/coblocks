@@ -8,7 +8,6 @@ import babel from "@rollup/plugin-babel";
 import json from "@rollup/plugin-json";
 import sizes from "@atomico/rollup-plugin-sizes";
 import autoExternal from "rollup-plugin-auto-external";
-import importAssertions from "rollup-plugin-import-assertions";
 
 async function getBuildPackages(packagesDir) {
   return new Promise((resolve, reject) => {
@@ -61,7 +60,7 @@ async function build(commandLineArgs) {
       }),
       sizes(),
       json(),
-      importAssertions(),
+      // importAssertions(),
     ];
 
     config.push({

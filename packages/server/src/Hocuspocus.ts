@@ -7,7 +7,7 @@ import kleur from 'kleur'
 import { v4 as uuid } from 'uuid'
 import WebSocket, { AddressInfo } from 'ws'
 import { Doc, applyUpdate, encodeStateAsUpdate } from 'yjs'
-import meta from '../package.json' assert { type: 'json' }
+import meta from '../package.json' /*assert { type: 'json' } */
 import { Server as HocuspocusServer } from './Server'
 import { ClientConnection } from './ClientConnection.js'
 // TODO: would be nice to only have a dependency on ClientConnection, and not on Connection
