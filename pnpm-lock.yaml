@@ -124,9 +124,6 @@ importers:
       '@hocuspocus/extension-logger':
         specifier: workspace:*
         version: link:../../packages/extension-logger
-      '@hocuspocus/extension-sqlite':
-        specifier: workspace:*
-        version: link:../../packages/extension-sqlite
       '@hocuspocus/server':
         specifier: workspace:*
         version: link:../../packages/server

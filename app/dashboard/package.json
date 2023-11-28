@@ -61,6 +61,10 @@
       "last 1 safari version"
     ]
   },
+  "files": [
+    "src",
+    "dist"
+  ],
   "refine": {
     "projectId": "hNduwj-Hd58Ak-gfFWaT"
   }

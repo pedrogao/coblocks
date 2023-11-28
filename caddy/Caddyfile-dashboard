@@ -1,0 +1,17 @@
+{
+	auto_https off
+}
+
+:5173 {
+	encode gzip
+
+	handle /api/* {
+		reverse_proxy coblocks-admin:3000
+	}
+
+	handle {
+		root * /var/www/html
+		try_files {path} /index.html
+		file_server
+	}
+}

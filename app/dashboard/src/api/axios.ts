@@ -1,7 +1,7 @@
 import { HttpError } from "@refinedev/core";
 import axios from "axios";
 
-export const API_URL = "http://localhost:3000";
+export const API_URL = "http://localhost:3000/api";
 
 export const TOKEN_KEY = "coblocks-access-token";
 

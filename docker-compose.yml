@@ -1,3 +1,4 @@
+# @see https://docs.docker.com/compose/compose-file/build/
 version: "3.9"
 
 services:
@@ -29,8 +30,10 @@ services:
 
   # coblocks-access:
   #   build:
-  #     context: ./access
+  #     context: ./
   #     dockerfile: Dockerfile
+  #     args:
+  #       - target=access
   #   ports:
   #     - "5000:5000"
   #   depends_on:
@@ -39,3 +42,44 @@ services:
   #     DATABASE_URL: mysql://root:123456@mysql:3306/coblocks
   #     NODE_ENV: development
   #     PORT: 3000
+
+  coblocks-core:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: core
+    ports:
+      - "5000:5000"
+    networks:
+      - coblocks
+    depends_on:
+      - mysql
+    environment:
+      DATABASE_URL: mysql://root:123456@mysql:3306/coblocks
+      NODE_ENV: development
+
+  coblocks-admin:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: admin
+    ports:
+      - "3000:3000"
+    networks:
+      - coblocks
+
+  coblocks-dashboard:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: dashboard
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./caddy/Caddyfile-dashboard:/etc/caddy/Caddyfile
+    networks:
+      - coblocks
+
+networks:
+  coblocks:
+    driver: bridge
