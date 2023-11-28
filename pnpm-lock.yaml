@@ -88,9 +88,6 @@ importers:
       rollup-plugin-auto-external:
         specifier: ^2.0.0
         version: 2.0.0(rollup@2.70.1)
-      rollup-plugin-import-assertions:
-        specifier: ^0.4.0
-        version: 0.4.0(rollup@2.70.1)
       rollup-plugin-sourcemaps:
         specifier: ^0.6.3
         version: 0.6.3(@types/node@20.9.2)(rollup@2.70.1)
@@ -18750,18 +18747,6 @@ packages:
       semver: 5.7.2
     dev: true
 
-  /rollup-plugin-import-assertions@0.4.0(rollup@2.70.1):
-    resolution: {integrity: sha512-K3yWSE8cXclhkbAtQ20Xt91P/pbJKbaUeQn4E5eE3aj0nyTgGZse82U0W1ZwnV3iIpDkwUO0M3BaxDz1LZGQ7Q==}
-    peerDependencies:
-      rollup: ^2.60.0
-    dependencies:
-      '@rollup/pluginutils': 4.2.1
-      acorn: 8.11.2
-      acorn-import-assertions: github.com/swiing/acorn-import-assertions/b941e5ae5065690654c0732c5eeaebe89318d2ac(acorn@8.11.2)
-      estree-walker: 2.0.2
-      rollup: 2.70.1
-    dev: true
-
   /rollup-plugin-sourcemaps@0.6.3(@types/node@20.9.2)(rollup@2.70.1):
     resolution: {integrity: sha512-paFu+nT1xvuO1tPFYXGe+XnQvg4Hjqv/eIhG8i5EspfYYPBKL57X7iVbfv55aNVASg3dzWvES9dmWsL2KhfByw==}
     engines: {node: '>=10.0.0'}
@@ -21594,14 +21579,3 @@ packages:
   /zwitch@1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
     dev: false
-
-  github.com/swiing/acorn-import-assertions/b941e5ae5065690654c0732c5eeaebe89318d2ac(acorn@8.11.2):
-    resolution: {commit: b941e5ae5065690654c0732c5eeaebe89318d2ac, repo: http://github.com/swiing/acorn-import-assertions.git, type: git}
-    id: github.com/swiing/acorn-import-assertions/b941e5ae5065690654c0732c5eeaebe89318d2ac
-    name: acorn-import-assertions
-    version: 1.7.6
-    peerDependencies:
-      acorn: ^8
-    dependencies:
-      acorn: 8.11.2
-    dev: true
