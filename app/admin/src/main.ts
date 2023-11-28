@@ -14,6 +14,7 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+  app.setGlobalPrefix('api');
 
   await app.listen(port);
 }

@@ -37,14 +37,22 @@ RUN pnpm --prefix ./app/dashboard run build
 
 # deploy
 RUN pnpm deploy --filter=./app/core --prod /prod/core
+RUN cp -R ./app/proto/pb /prod/core/dist/proto
+RUN ls -al /prod/core/dist/proto
+
 RUN pnpm deploy --filter=./app/admin --prod /prod/admin
+RUN cp -R ./app/proto/pb /prod/admin/dist/proto
+
 RUN pnpm deploy --filter=./app/access --prod /prod/access
+RUN cp -R ./app/proto/pb /prod/access/dist/proto
+
 RUN pnpm deploy --filter=./app/dashboard --prod /prod/dashboard
 
 # targets
 # core
 FROM node:20-alpine as core
 COPY --from=build /prod/core /prod/core
+RUN apk add openssl
 WORKDIR /prod/core
 EXPOSE 5000
 CMD ["node", "dist/main.js"]
@@ -62,3 +70,9 @@ COPY --from=build /prod/admin /prod/admin
 WORKDIR /prod/admin
 EXPOSE 3000
 CMD ["node", "dist/main.js"]
+
+# dashboard
+FROM caddy:latest as dashboard
+COPY --from=build /usr/app/app/dashboard/dist /var/www/html
+EXPOSE 5173
+CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile"]
