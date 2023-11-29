@@ -1,5 +1,5 @@
 import { Controller, Logger } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
+import { GrpcMethod, RpcException } from '@nestjs/microservices';
 import {
   RoomServiceController,
   ROOM_SERVICE_NAME,
@@ -39,6 +39,9 @@ export class RoomController implements RoomServiceController {
 
   async findRoomByName(request: FindRoomByNameRequest): Promise<Room> {
     const room = await this.roomService.findRoomByName(request.name);
+    if (!room || !room.id) {
+      throw new RpcException('Room not found');
+    }
 
     return {
       id: room.id.toString(),

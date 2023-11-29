@@ -5,7 +5,8 @@ Cobratative blocks open source implementation.
 ## Setup
 
 ```sh
-$ cd ./app/proto && npx prisma generate
+$ echo 'DATABASE_URL="mysql://root:123456@localhost:3306/coblocks"' > ./app/core/.env
+$ pnpm --prefix ./app/core prisma generate
 
 $ docker-compose up -d
 ```

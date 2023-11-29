@@ -4,6 +4,10 @@ import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
 import { VoidResponse } from "./common";
 
+export interface FindProjectAPIKeyRequest {
+  apiKey: string;
+}
+
 export interface UpdateProjectAPIKeyRequest {
   id: string;
   permission?: number | undefined;
@@ -50,6 +54,8 @@ export interface ProjectAPIKeyServiceClient {
     metadata?: Metadata,
   ): Observable<FindProjectAPIKeyListResponse>;
 
+  findProjectApiKey(request: FindProjectAPIKeyRequest, metadata?: Metadata): Observable<ProjectAPIKey>;
+
   createProjectApiKey(request: CreateProjectAPIKeyRequest, metadata?: Metadata): Observable<ProjectAPIKey>;
 
   updateProjectApiKey(request: UpdateProjectAPIKeyRequest, metadata?: Metadata): Observable<ProjectAPIKey>;
@@ -62,6 +68,11 @@ export interface ProjectAPIKeyServiceController {
     request: FindProjectAPIKeyListRequest,
     metadata?: Metadata,
   ): Promise<FindProjectAPIKeyListResponse> | Observable<FindProjectAPIKeyListResponse> | FindProjectAPIKeyListResponse;
+
+  findProjectApiKey(
+    request: FindProjectAPIKeyRequest,
+    metadata?: Metadata,
+  ): Promise<ProjectAPIKey> | Observable<ProjectAPIKey> | ProjectAPIKey;
 
   createProjectApiKey(
     request: CreateProjectAPIKeyRequest,
@@ -83,6 +94,7 @@ export function ProjectAPIKeyServiceControllerMethods() {
   return function (constructor: Function) {
     const grpcMethods: string[] = [
       "findProjectApiKeyList",
+      "findProjectApiKey",
       "createProjectApiKey",
       "updateProjectApiKey",
       "deleteProjectApiKey",

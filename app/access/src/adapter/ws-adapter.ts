@@ -7,11 +7,11 @@ import { MessageMappingProperties } from '@nestjs/websockets/gateway-metadata-ex
 import * as http from 'http';
 import { EMPTY, fromEvent, Observable } from 'rxjs';
 import { filter, first, mergeMap, share, takeUntil } from 'rxjs/operators';
-// import { SQLite } from '@hocuspocus/extension-sqlite';
 import { Server, Hocuspocus } from '@hocuspocus/server';
 import { Server as WebSocketServer } from 'ws';
 import { Storage } from '../extensions/storage';
 import { Logger as ServerLogger } from '../extensions/logger';
+import { Auth } from '../extensions/auth';
 
 let wsPackage: any = {};
 
@@ -43,10 +43,10 @@ export class WsAdapter extends AbstractWsAdapter {
     super(appOrHttpServer);
     wsPackage = loadPackage('ws', 'WsAdapter', () => require('ws'));
 
+    const auth = appOrHttpServer.get(Auth);
     const storage = appOrHttpServer.get(Storage);
-
     this.hocuspocusServer = Server.configure({
-      extensions: [new ServerLogger(), storage],
+      extensions: [new ServerLogger(), auth, storage],
     });
   }
 
