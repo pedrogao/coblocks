@@ -7,11 +7,13 @@ export const createHocuspocusProvider = ({
   url,
   doc = new Y.Doc(),
   autoConnect = true,
+  token = null,
 }: {
   name: string;
   url: string;
   autoConnect?: boolean;
   doc?: Y.Doc;
+  token: string | (() => string) | (() => Promise<string>) | null;
 }) => {
   const HocuspocusProviderContext = createContext<HocuspocusProvider | null>(null);
 
@@ -22,6 +24,7 @@ export const createHocuspocusProvider = ({
         name,
         document: doc,
         connect: false,
+        token,
       });
     }, []);
 

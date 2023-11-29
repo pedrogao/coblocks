@@ -67,6 +67,7 @@ export class ProjectApikeyService {
           return {
             ...item,
             permission: item.permission === Permission.ReadOnly ? 'ReadOnly' : 'ReadWrite',
+            status: item.status === 1 ? 'Open' : 'Closed',
           };
         }) || [],
       total: resp.total,

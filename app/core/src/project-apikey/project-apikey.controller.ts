@@ -10,6 +10,7 @@ import {
   ProjectAPIKey,
   VoidResponse,
   FindProjectAPIKeyListResponse,
+  FindProjectAPIKeyRequest,
 } from '@coblocks/proto';
 import { GrpcMethod } from '@nestjs/microservices';
 
@@ -85,6 +86,21 @@ export class ProjectApikeyController implements ProjectAPIKeyServiceController {
         };
       }),
       total,
+    };
+  }
+
+  @GrpcMethod(PROJECT_AP_IKEY_SERVICE_NAME, 'findProjectApiKey')
+  async findProjectApiKey(request: FindProjectAPIKeyRequest): Promise<ProjectAPIKey> {
+    const projectApiKey = await this.projectApikeyService.findProjectAPIKey(request);
+    return {
+      id: projectApiKey.id.toString(),
+      projectId: projectApiKey.project_id.toString(),
+      permission: projectApiKey.permission,
+      apiKey: projectApiKey.api_key,
+      roomList: projectApiKey.room_list.toString(),
+      status: projectApiKey.status ? 1 : 0,
+      createdTime: projectApiKey.create_time.toISOString(),
+      updatedTime: projectApiKey.update_time.toISOString(),
     };
   }
 }

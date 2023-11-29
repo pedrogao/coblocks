@@ -8,6 +8,9 @@ service ProjectAPIKeyService {
   rpc FindProjectAPIKeyList(FindProjectAPIKeyListRequest)
       returns (FindProjectAPIKeyListResponse) {}
 
+  rpc FindProjectAPIKey(FindProjectAPIKeyRequest)
+      returns (ProjectAPIKey) {}
+
   rpc CreateProjectAPIKey(CreateProjectAPIKeyRequest) returns (ProjectAPIKey) {}
 
   rpc UpdateProjectAPIKey(UpdateProjectAPIKeyRequest) returns (ProjectAPIKey) {}
@@ -15,6 +18,8 @@ service ProjectAPIKeyService {
   rpc DeleteProjectAPIKey(DeleteProjectAPIKeyRequest)
       returns (common.VoidResponse) {}
 }
+
+message FindProjectAPIKeyRequest { string api_key = 1; }
 
 message UpdateProjectAPIKeyRequest {
   string id = 1;

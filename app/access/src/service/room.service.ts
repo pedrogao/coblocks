@@ -1,4 +1,4 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import {
   ROOM_DOC_SERVICE_NAME,
   ROOM_HOOK_SERVICE_NAME,
@@ -13,12 +13,14 @@ import { ClientGrpc } from '@nestjs/microservices';
 
 @Injectable()
 export class RoomService implements OnModuleInit {
+  private logger = new Logger(RoomService.name);
+
   private roomClient: RoomServiceClient;
   private roomDocClient: RoomDocServiceClient;
   private roomHookClient: RoomHookServiceClient;
   private roomMetadataClient: RoomMetadataServiceClient;
 
-  constructor(@Inject('room') private client: ClientGrpc) {}
+  constructor(@Inject('access') private client: ClientGrpc) {}
 
   onModuleInit() {
     this.roomClient = this.client.getService<RoomServiceClient>(ROOM_SERVICE_NAME);
@@ -30,29 +32,36 @@ export class RoomService implements OnModuleInit {
   }
 
   async findByName(name: string) {
-    const resp = await this.roomClient
-      .findRoomByName({
-        name,
-      })
-      .toPromise();
+    try {
+      const resp = await this.roomClient
+        .findRoomByName({
+          name,
+        })
+        .toPromise();
 
-    if (!resp) {
+      if (!resp) {
+        return null;
+      }
+
+      const id = resp.id;
+      const roomDoc = await this.roomDocClient.getRoomDoc({ roomId: id }).toPromise();
+      const roomMetadata = await this.roomMetadataClient
+        .getRoomMetadata({ roomId: id })
+        .toPromise();
+
+      return {
+        id: resp.id,
+        name: resp.name,
+        projectId: resp.projectId,
+        status: resp.status,
+        creatorId: resp.creatorId,
+        doc: roomDoc.doc,
+        metadata: roomMetadata.metadata,
+      };
+    } catch (error) {
+      this.logger.error(error);
       return null;
     }
-
-    const id = resp.id;
-    const roomDoc = await this.roomDocClient.getRoomDoc({ roomId: id }).toPromise();
-    const roomMetadata = await this.roomMetadataClient.getRoomMetadata({ roomId: id }).toPromise();
-
-    return {
-      id: resp.id,
-      name: resp.name,
-      projectId: resp.projectId,
-      status: resp.status,
-      creatorId: resp.creatorId,
-      doc: roomDoc.doc,
-      metadata: roomMetadata.metadata,
-    };
   }
 
   async updateDoc(roomId: string, doc: string) {

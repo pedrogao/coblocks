@@ -3,6 +3,7 @@ import {
   DeleteProjectAPIKeyRequest,
   FindProjectAPIKeyListRequest,
   UpdateProjectAPIKeyRequest,
+  FindProjectAPIKeyRequest,
 } from '@coblocks/proto';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../dao/prisma.service';
@@ -71,6 +72,14 @@ export class ProjectApikeyService {
         permission: req.permission,
         room_list: req.roomList,
         creator_id: BigInt(req.creatorId),
+      },
+    });
+  }
+
+  async findProjectAPIKey(req: FindProjectAPIKeyRequest) {
+    return this.prismaService.projectAPIKey.findFirst({
+      where: {
+        api_key: req.apiKey,
       },
     });
   }
