@@ -32,6 +32,7 @@
   "scripts": {
     "start": "npm run app:start && npm run playground",
     "playground": "npm --prefix ./playground/examples run dev",
+    "dashboard": "npm --prefix ./app/dashboard run dev",
     "playground:load-document": "concurrently --kill-others \"npm --prefix ./playground/examples run dev\" \"npm --prefix ./playground/backend run dev src/load-document.ts\"",
     "playground:express": "concurrently --kill-others \"npm --prefix ./playground/examples run dev\" \"npm --prefix ./playground/backend run dev src/express.ts\"",
     "playground:koa": "concurrently --kill-others \"npm --prefix ./playground/examples run dev\" \"npm --prefix ./playground/backend run dev src/koa.ts\"",

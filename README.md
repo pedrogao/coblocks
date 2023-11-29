@@ -18,7 +18,9 @@ Open-source implementation of `Collaborative Blocks`, based on [Y.js](https://gi
 
 ## Documentation
 
-The full documentation is a available on [hocuspocus.dev/introduction](https://www.hocuspocus.dev/introduction), **but it's `hocuspocus` only**.
+- [introduction](./docs/introduction.md);
+- [getting-started](./docs/getting-started.md);
+- [hocuspocus.dev/introduction](https://www.hocuspocus.dev/introduction), **`hocuspocus` only**;
 
 ## TODO
 
@@ -26,21 +28,13 @@ See [TODO.md](./TODO.md).
 
 ## Start From Local
 
-Run playground:
-
-```bash
-$ npm install
-$ npm run start
-```
-
-Unit test:
-
-```bash
-$ docker-compose up -d
-$ npm run test
-```
+See [getting-started.md](./docs/getting-started.md).
 
 ## Examples
+
+### Dashboard
+
+![dashboard](./docs/image-8.png)
 
 ### Counter、Form、Table
 
@@ -53,10 +47,6 @@ $ npm run test
 ## Contributing
 
 Please see [CONTRIBUTING](docs/contributing.md) for details.
-
-## Contributors
-
-[kris](https://github.com/kriskbx) (who wrote the initial version), [Tom Moor](https://github.com/tommoor), [YousefED (@TypeCellOS)](https://github.com/YousefED) and [many more](../../contributors).
 
 ## License
 
