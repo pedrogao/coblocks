@@ -58,7 +58,6 @@ export const dataProvider = (
 
   create: async ({ resource, variables }) => {
     const url = `${apiUrl}/${resource}`;
-    console.log("variables", variables);
     try {
       const { data } = await httpClient.post(url, variables);
 
